@@ -21,6 +21,13 @@ app.use(cors({
   methods: "*"
 }));
 
+// users
+/*app.get("/api/users", usersGet);
+app.post("/api/users", usersPost);*/
+
+//session
+//app.post("/api/session", sessionPost);
+
 app.listen(PORT, () => {
   console.log(`The server is listening on the PORT ${PORT} (URL http://localhost:${PORT} )`);
 })
