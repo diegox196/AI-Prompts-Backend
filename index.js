@@ -1,38 +1,17 @@
-const express = require('express');
-const app = express();
-const PORT = 3201;
+const app = require('./app'); // app.js file with the Express configuration
+require('dotenv').config()
 
 // database connection
-const mongoose = require("mongoose");
-const mongoDB = "mongodb://127.0.0.1:27017/aipromts";
-mongoose.connect(mongoDB, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
+const {PORT} = process.env;
+require('./database');
 
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+//const { login } = require('');
 
-// parser for the request body (required for the POST and PUT methods)
-const bodyParser = require("body-parser");
-app.use(bodyParser.json());
+//app.post("/api/login",) 
 
-// check for cors
-const cors = require("cors");
-app.use(cors({
-  domains: '*',
-  methods: "*"
-}));
-
-//Import user http methods
-const {userGet, userPost, userPatch, userDelete} = require('./controllers/userController.js');
-
-// User http methods
-app.get("/api/user", userGet);
-app.post("/api/user", userPost);
-app.patch("/api/user", userPatch);
-app.delete("/api/user", userDelete);
-
+const userRouter = require('./routes/userRoute');
+app.use(userRouter); // Routes for the user http method
+ 
 //session
 //app.post("/api/session", sessionPost);
 
