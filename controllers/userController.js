@@ -1,0 +1,82 @@
+const User = require('../models/userModel');
+
+const userGet = async (req, res) => {
+  //if an especific user ir required 
+  if (req.query && req.query.id) {
+    await User.findById(req.query.id)
+      .then(user => {
+        res.status(200); //Ok
+        res.json(user);
+      })
+      .catch((err) => {
+        res.status(404); //Not found
+        res.json({ error: 'User not found' });
+      });
+  } else {
+    await User.find()
+      .then(users => {
+        res.status(200); //Ok
+        res.json(users);
+      })
+      .catch(err => {
+        res.status(442); //Unprocessable Content
+        res.json({ error: err });
+      })
+  }
+}
+
+const userPost = async (req, res) => {
+  let newUser = new User(req.body);
+  await newUser.save()
+    .then(user => {
+      res.header({
+        'location': `api/user/?id=${user.id}`
+      });
+      res.status(201); //Created
+      res.json(user);
+    })
+    .catch(err => {
+      res.status(442); //Unprocessable Content
+      res.json({ error: 'There was an error saving the user' });
+    })
+}
+
+const userPatch = async (req, res) => {
+  if (req.query && req.query.id) {
+    await User.findById(req.query.id)
+      .then(user => {
+        newData = req.body
+        Object.assign(user, newData);
+        user.save();
+        res.status(200); //Ok
+        res.json(user);
+      })
+      .catch(err => {
+        res.status(442); //Unprocessable Content
+        res.json({ error: 'There was an error updating the user' });
+      })
+  } else {
+    res.status(404); //Not found
+    res.json({ error: 'User not found' })
+  }
+}
+
+const userDelete = async (req, res) => {
+  if (req.query && req.query.id) {
+    await User.findById(req.query.id)
+      .then(user => {
+        user.deleteOne();
+        res.status(200); //Ok
+        res.json({ message: 'User deleted successfully' });
+      })
+      .catch(err => {
+        res.status(442); //Unprocessable Content
+        res.json({ error: 'There was an error deleting the user' });
+      })
+  } else {
+    res.status(404); //Not found
+    res.json({ error: 'User not found' })
+  }
+}
+
+module.exports = { userGet, userPost, userPatch, userDelete };
