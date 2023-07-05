@@ -26,19 +26,28 @@ const userGet = async (req, res) => {
 }
 
 const userPost = async (req, res) => {
-  let newUser = new User(req.body);
-  await newUser.save()
-    .then(user => {
-      res.header({
-        'location': `api/user/?id=${user.id}`
-      });
-      res.status(201); //Created
-      res.json(user);
-    })
-    .catch(err => {
-      res.status(442); //Unprocessable Content
-      res.json({ error: 'There was an error saving the user' });
-    })
+  const { email, password, ...userData } = req.body;
+  const exist = await User.findOne({ email: email.toLowerCase()});
+
+  if (exist) {
+    res.status(409); // Conflict
+    res.send("User Already Exist.");
+  } else {
+    const encryptedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({ ...userData, email: email.toLowerCase(), password: encryptedPassword });
+    await newUser.save()
+      .then(user => {
+        res.header({ 
+          'location': `api/user/?id=${user.id}`
+        });
+        res.status(201); //Created
+        res.json(user);
+      })
+      .catch(err => {
+        res.status(442); //Unprocessable Content
+        res.json({ error: 'There was an error saving the user' });
+      })
+  }
 }
 
 const userPatch = async (req, res) => {
