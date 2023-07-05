@@ -1,4 +1,5 @@
 const User = require('../models/userModel');
+const bcryptjs = require('bcryptjs'); 
 
 const userGet = async (req, res) => {
   //if an especific user ir required 
@@ -27,17 +28,17 @@ const userGet = async (req, res) => {
 
 const userPost = async (req, res) => {
   const { email, password, ...userData } = req.body;
-  const exist = await User.findOne({ email: email.toLowerCase()});
+  const exist = await User.findOne({ email: email.toLowerCase() });
 
   if (exist) {
     res.status(409); // Conflict
-    res.send("User Already Exist.");
+    res.send({ error: "User Already Exist." });
   } else {
-    const encryptedPassword = await bcrypt.hash(password, 10);
+    const encryptedPassword = bcryptjs.hashSync(password, 10);
     const newUser = new User({ ...userData, email: email.toLowerCase(), password: encryptedPassword });
     await newUser.save()
       .then(user => {
-        res.header({ 
+        res.header({
           'location': `api/user/?id=${user.id}`
         });
         res.status(201); //Created
