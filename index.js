@@ -9,11 +9,13 @@ require('./database');
 
 //app.post("/api/login",) 
 
+//user
 const userRouter = require('./routes/userRoute');
 app.use(userRouter); // Routes for the user http method
  
 //session
-//app.post("/api/session", sessionPost);
+const sessionRouter = require('./routes/sessionRoute');
+app.use(sessionRouter); // Routes for the session http method
 
 app.listen(PORT, () => {
   console.log(`The server is listening on the PORT ${PORT} (URL http://localhost:${PORT})`);
