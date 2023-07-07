@@ -1,9 +1,12 @@
 const mongoose = require('mongoose');
 
 const tagSchema = new mongoose.Schema({
-  userId: { type: mongoose.ObjectId },
+  userId: {
+    type: mongoose.Schema.ObjectId,
+    ref: "User",
+    require: true
+  },
   tags: [{
-    id: { type: String, default: mongoose.ObjectId },
     name: { type: String }
   }]
 });
