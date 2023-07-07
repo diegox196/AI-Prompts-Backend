@@ -5,12 +5,13 @@ const userRouter = app.Router();
 const checkUserAuth = require('../middlewares/userAuth');
 
 //Import user http methods
-const { userGet, userPost, userPatch, userDelete } = require('../controllers/userController.js');
+const { getUserById, getAllUsers, addNewUser, updateUserById, deleteUserById } = require('../controllers/userController.js');
 
 // User http methods
-userRouter.get("/api/user", checkUserAuth, userGet);
-userRouter.post("/api/user", userPost);
-userRouter.patch("/api/user", userPatch);
-userRouter.delete("/api/user", userDelete);
+userRouter.get('/api/user/:id', getUserById);
+userRouter.get('/api/user', getAllUsers);
+userRouter.post("/api/user", addNewUser);
+userRouter.patch("/api/user/:id", updateUserById);
+userRouter.delete("/api/user/:id", deleteUserById);
 
 module.exports = userRouter;
