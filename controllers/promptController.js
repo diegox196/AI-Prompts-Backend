@@ -4,29 +4,46 @@ const User = require('../models/userModel');
 //Http Status Code
 const httpStatus = require('../utils/httpStatus');
 
-const promptGet = async (req, res) => {
-  //if an especific user id required 
-  if (req.query && req.query.id) {
-    await Prompt.findById(req.query.id)
-      .then(prompt => {
-        res.status(httpStatus.OK).json(prompt);
-      })
-      .catch((err) => {
-        res.status(httpStatus.NOT_FOUND).json({ error: 'Prompt not found' });
-      });
-  } else {
-    await Prompt.find()
-      .then(prompt => {
-        res.status(httpStatus.OK).json(prompt);
-      })
-      .catch(err => {
-        res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: err });
-      })
+const getPromptById = async (req, res) => {
+  try {
+    const prompt = await Prompt.findById(req.params.id);
+    if (prompt) {
+      res.status(httpStatus.OK).json(prompt);
+    } else {
+      res.status(httpStatus.NOT_FOUND).json({ error: 'Prompt not found' });
+    }
+  } catch (err) {
+    res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: err.message });
   }
-}
+};
 
-const promptPost = async (req, res) => {
+const getPromptByUserId = async (req, res) => {
+  try {
+    const prompt = await Prompt.find({ userId: req.params.id });
+    if (prompt) {
+      res.status(httpStatus.OK).json(prompt);
+    } else {
+      res.status(httpStatus.NOT_FOUND).json({ error: 'User prompts not found' });
+    }
+  } catch (err) {
+    res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: err.message });
+  }
+};
 
+const getAllPrompts = async (req, res) => {
+  try {
+    const prompt = await Prompt.find();
+    if (prompt) {
+      res.status(httpStatus.OK).json(prompt);
+    } else {
+      res.status(httpStatus.NO_CONTENT).json({});
+    }
+  } catch (err) {
+    res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: err.message });
+  }
+};
+
+const addNewPrompt = async (req, res) => {
   try {
     const newPrompt = new Prompt(req.body);
     await newPrompt.save()
@@ -42,7 +59,7 @@ const promptPost = async (req, res) => {
   }
 }
 
-const promptPatch = async (req, res) => {
+const updatePromptById = async (req, res) => {
   if (req.query && req.query.id) {
     await Prompt.findById(req.query.id)
       .then(prompt => {
@@ -58,7 +75,7 @@ const promptPatch = async (req, res) => {
   }
 }
 
-const promptDelete = async (req, res) => {
+const deletePromptById = async (req, res) => {
   if (req.query && req.query.id) {
     await Prompt.findById(req.query.id)
       .then(prompt => {
@@ -73,4 +90,4 @@ const promptDelete = async (req, res) => {
   }
 }
 
-module.exports = { promptGet, promptPost, promptPatch, promptDelete };
+module.exports = { getPromptById, getPromptByUserId, getAllPrompts, addNewPrompt, updatePromptById, deletePromptById };

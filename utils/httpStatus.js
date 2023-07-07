@@ -2,6 +2,7 @@ const httpStatus = {
   //2xx Success
   OK: 200,
   CREATED: 201,
+  NO_CONTENT: 204,
   //4xx Client Error
   BAD_REQUEST: 400,
   UNAUTHORIZED: 401,

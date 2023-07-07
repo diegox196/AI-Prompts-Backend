@@ -5,12 +5,14 @@ const promptRouter = app.Router();
 const checkUserAuth = require('../middlewares/userAuth');
 
 //Import user http methods
-const { promptGet, promptPost, promptPatch, promptDelete } = require('../controllers/promptController.js');
+const { getPromptById, getPromptByUserId, getAllPrompts, addNewPrompt, updatePromptById, deletePromptById } = require('../controllers/promptController.js');
 
 // User http methods
-promptRouter.get("/api/prompt", checkUserAuth, promptGet);
-promptRouter.post("/api/prompt", checkUserAuth, promptPost);
-promptRouter.patch("/api/prompt", checkUserAuth, promptPatch);
-promptRouter.delete("/api/prompt", checkUserAuth, promptDelete);
+promptRouter.get("/api/prompt/:id", checkUserAuth, getPromptById);
+promptRouter.get("/api/prompt/user/:id", checkUserAuth, getPromptByUserId);
+promptRouter.get("/api/prompt", checkUserAuth, getAllPrompts);
+promptRouter.post("/api/prompt", checkUserAuth, addNewPrompt);
+promptRouter.patch("/api/prompt/:id", checkUserAuth, updatePromptById);
+promptRouter.delete("/api/prompt/:id", checkUserAuth, deletePromptById);
 
 module.exports = promptRouter;

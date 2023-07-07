@@ -20,7 +20,11 @@ const getUserById = async (req, res) => {
 const getAllUsers = async (req, res) => {
   try {
     const users = await User.find();
-    res.status(httpStatus.OK).json(users);
+    if (users) {
+      res.status(httpStatus.OK).json(users);
+    } else {
+      res.status(httpStatus.NO_CONTENT).json({ });
+    }
   } catch (err) {
     res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: err });
   }
