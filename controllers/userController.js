@@ -23,7 +23,7 @@ const getAllUsers = async (req, res) => {
     if (users) {
       res.status(httpStatus.OK).json(users);
     } else {
-      res.status(httpStatus.NO_CONTENT).json({ });
+      res.status(httpStatus.NO_CONTENT).json({});
     }
   } catch (err) {
     res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: err.message });
@@ -31,24 +31,28 @@ const getAllUsers = async (req, res) => {
 };
 
 const addNewUser = async (req, res) => {
-  const { email, password, ...userData } = req.body;
-  const exist = await User.findOne({ email: email.toLowerCase() });
+  try {
+    const { email, password, ...userData } = req.body;
+    const exist = await User.findOne({ email: email.toLowerCase() });
 
-  if (exist) {
-    res.status(httpStatus.CONFLICT).send({ error: "User Already Exist." });
-  } else {
-    const encryptedPassword = bcryptjs.hashSync(password, 10);
-    const newUser = new User({ ...userData, email: email.toLowerCase(), password: encryptedPassword });
-    await newUser.save()
-      .then(user => {
-        res.header({
-          'location': `api/user/?id=${user.id}`
-        });
-        res.status(httpStatus.CREATED).json(user);
-      })
-      .catch(err => {
-        res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: 'There was an error saving the user' });
-      })
+    if (exist) {
+      res.status(httpStatus.CONFLICT).send({ error: "User Already Exist." });
+    } else {
+      const encryptedPassword = bcryptjs.hashSync(password, 10);
+      const newUser = new User({ ...userData, email: email.toLowerCase(), password: encryptedPassword });
+      await newUser.save()
+        .then(user => {
+          res.header({
+            'location': `api/user/?id=${user.id}`
+          });
+          res.status(httpStatus.CREATED).json(user);
+        })
+        .catch(err => {
+          res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: 'There was an error saving the user' });
+        })
+    }
+  } catch (error) {
+    res.status(httpStatus.BAD_REQUEST).json({ error: 'Bad request' });
   }
 }
 

@@ -54,7 +54,6 @@ const addNewPrompt = async (req, res) => {
         res.status(httpStatus.CREATED).json(newPrompt);
       });
   } catch (error) {
-    console.log(error);
     res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: 'There was an error saving the prompt' });
   }
 }
