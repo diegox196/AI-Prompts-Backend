@@ -12,27 +12,12 @@ const promptSchema = new mongoose.Schema({
     type: mongoose.ObjectId,
     ref: 'Tag'
   }],
-  response: {type: String}
-},
-{discriminatorKey: 'promptType'}); //To inherit schema properties depending on the type 'edit' or 'image'
-
-//Subschema for type edit
-const editPromptSchema = new mongoose.Schema({
+  model: {type: String},
   input: { type: String },
   instruction: { type: String },
-  temperature: { type: Number }
+  temperature: { type: Number },
+  response: {type: String}
 });
-
-//Subschema for type image
-const imagePromptSchema = new mongoose.Schema({
-  prompt: { type: String },
-  n: { type: Number },
-  size: { type: String }
-});
-
-// Subschemas are added as discriminators
-promptSchema.discriminator('text', editPromptSchema);
-promptSchema.discriminator('image', imagePromptSchema);
 
 
 module.exports = mongoose.model('Prompt', promptSchema);
