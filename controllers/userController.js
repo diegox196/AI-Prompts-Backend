@@ -13,7 +13,7 @@ const getUserById = async (req, res) => {
       res.status(httpStatus.NOT_FOUND).json({ error: 'User not found' });
     }
   } catch (err) {
-    res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: err });
+    res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: err.message });
   }
 };
 
@@ -26,7 +26,7 @@ const getAllUsers = async (req, res) => {
       res.status(httpStatus.NO_CONTENT).json({ });
     }
   } catch (err) {
-    res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: err });
+    res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: err.message });
   }
 };
 
