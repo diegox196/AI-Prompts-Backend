@@ -21,6 +21,10 @@ app.use(sessionRouter); // Routes for the session http method
 const promptRouter = require('./routes/promptRoute');
 app.use(promptRouter); // Routes for the prompt http method
 
+//tag
+const tagRouter = require('./routes/tagRoute');
+app.use(tagRouter); // Routes for the prompt http method
+
 app.listen(PORT, () => {
   console.log(`The server is listening on the PORT ${PORT} (URL http://localhost:${PORT})`);
 })
