@@ -30,9 +30,17 @@ const sessionAuth = async (req, res) => {
       expire: new Date(Date.now() + 86400000) // 1 day expiration in milliseconds
     });
 
+    const {active, first_name, last_name, role} = user;
+
+    const newUser = {
+      active: active,
+      name: `${first_name} ${last_name}`,
+      role: role
+    }
+
     await session.save()
       .then(() => {
-        res.status(httpStatus.OK).json({ user, tokenSession });
+        res.status(httpStatus.OK).json({ user: newUser, tokenSession });
       })
       .catch(err => {
         res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: 'There was an error saving the session' });
