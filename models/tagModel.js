@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const tagSchema = new mongoose.Schema({
-  userId: {
+  user_id: {
     type: mongoose.Schema.ObjectId,
     ref: "User",
     require: true

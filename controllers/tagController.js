@@ -12,7 +12,7 @@ const tagPost = async (req, res) => {
   try {
     const { userId, tags } = req.body;
 
-    let existingTag = await Tag.findOne({ userId });
+    let existingTag = await Tag.findOne({ user_id: userId });
 
     //Creates a new tag if the userId doesn't exist, but in case they exist it get the arrray of previous tags and adds a new ones
     let newTag;

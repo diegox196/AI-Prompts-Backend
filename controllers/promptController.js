@@ -19,7 +19,7 @@ const getPromptById = async (req, res) => {
 
 const getPromptByUserId = async (req, res) => {
   try {
-    const prompt = await Prompt.find({ userId: req.params.id });
+    const prompt = await Prompt.find({ user_id: req.params.id });
     if (prompt) {
       res.status(httpStatus.OK).json(prompt);
     } else {

@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const promptSchema = new mongoose.Schema({
   name: { type: String },
   type: { type: String },
-  userId: {
+  user_id: {
     type: mongoose.ObjectId,
     ref: 'User'
   },
