@@ -59,17 +59,16 @@ const addNewPrompt = async (req, res) => {
 }
 
 const updatePromptById = async (req, res) => {
-  if (req.query && req.query.id) {
-    await Prompt.findById(req.query.id)
-      .then(prompt => {
-        Object.assign(prompt, req.body);
-        prompt.save();
-        res.status(httpStatus.OK).json(prompt);
-      })
-      .catch(err => {
-        res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: 'There was an error updating the prompt' });
-      })
-  } else {
+  try {
+    const prompt = await Prompt.findById(req.params.id);
+    if (prompt) {
+      Object.assign(prompt, req.body);
+      prompt.save();
+      res.status(httpStatus.OK).json(prompt);
+    } else {
+      res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: 'There was an error updating the prompt' });
+    }
+  } catch (err) {
     res.status(httpStatus.NOT_FOUND).json({ error: 'Prompt not found' })
   }
 }

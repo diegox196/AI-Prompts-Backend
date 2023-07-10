@@ -30,10 +30,11 @@ const sessionAuth = async (req, res) => {
       expire: new Date(Date.now() + 86400000) // 1 day expiration in milliseconds
     });
 
-    const {active, first_name, last_name, role} = user;
+    const {active, _id, first_name, last_name, role} = user;
 
     const newUser = {
       active: active,
+      user_id: _id,
       name: `${first_name} ${last_name}`,
       role: role
     }

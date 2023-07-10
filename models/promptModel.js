@@ -8,7 +8,7 @@ const promptSchema = new mongoose.Schema({
     type: mongoose.ObjectId,
     ref: 'User'
   },
-  tags: [{
+  categories: [{
     type: mongoose.ObjectId,
     ref: 'Tag'
   }],
