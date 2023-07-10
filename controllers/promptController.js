@@ -74,8 +74,8 @@ const updatePromptById = async (req, res) => {
 }
 
 const deletePromptById = async (req, res) => {
-  if (req.query && req.query.id) {
-    await Prompt.findById(req.query.id)
+  if (req.params && req.params.id) {
+    await Prompt.findById(req.params.id)
       .then(prompt => {
         prompt.deleteOne();
         res.status(httpStatus.OK).json({ message: 'Prompt deleted successfully' });
