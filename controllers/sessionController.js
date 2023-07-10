@@ -6,6 +6,41 @@ const token = require('../helpers/tokenManagement');
 //Http Status Code
 const httpStatus = require('../utils/httpStatus');
 
+const handleExistingSession = async (session, user) => {
+  if (session.expire < Date.now()) { //If the session has expired, generate a new token
+    const tokenSession = await token.tokenSing(user);
+    session.token = tokenSession;
+    session.expire = new Date(Date.now() + 86400000);  // 1 day expiration in milliseconds
+    await session.save();
+  } else { //If the session is valid, resend the existing token
+    return session.token;
+  }
+};
+
+// Generates a new token and saves the data in a new session. 
+const createSession = async (user) => {
+  const tokenSession = await token.tokenSing(user);
+  const session = new Session({
+    user: user.email,
+    token: tokenSession,
+    expire: new Date(Date.now() + 86400000) // 1 day expiration in milliseconds
+  });
+  await session.save();
+  return tokenSession
+};
+
+// Unstructure data, showing only some user attributes
+const userInfoJSON = (user) => {
+  const { active, _id, first_name, last_name, role } = user;
+
+  return {
+    active: active,
+    user_id: _id,
+    name: `${first_name} ${last_name}`,
+    role: role
+  }
+};
+
 const sessionAuth = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -22,30 +57,18 @@ const sessionAuth = async (req, res) => {
       return;
     }
 
-    const tokenSession = await token.tokenSing(user);
+    let tokenSession;
+    const session = await Session.findOne({ user: email.toLowerCase() });
 
-    const session = new Session({
-      user: user.email,
-      token: tokenSession,
-      expire: new Date(Date.now() + 86400000) // 1 day expiration in milliseconds
-    });
-
-    const {active, _id, first_name, last_name, role} = user;
-
-    const newUser = {
-      active: active,
-      user_id: _id,
-      name: `${first_name} ${last_name}`,
-      role: role
+    if (session) {
+      tokenSession = await handleExistingSession(session, user);
+    } else { // Create a new token
+      tokenSession = await createSession(user);
     }
 
-    await session.save()
-      .then(() => {
-        res.status(httpStatus.OK).json({ user: newUser, tokenSession });
-      })
-      .catch(err => {
-        res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: 'There was an error saving the session' });
-      })
+    const newUser = userInfoJSON(user);
+    res.status(httpStatus.OK).json({ user: newUser, tokenSession });
+
   } catch (error) {
     res.status(httpStatus.BAD_REQUEST).json({ error: 'Bad request' });
   }
