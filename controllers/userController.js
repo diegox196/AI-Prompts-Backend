@@ -13,7 +13,7 @@ const getUserById = async (req, res) => {
       res.status(httpStatus.NOT_FOUND).json({ error: 'User not found' });
     }
   } catch (err) {
-    res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: err.message });
+    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: err.message });
   }
 };
 
@@ -26,7 +26,7 @@ const getAllUsers = async (req, res) => {
       res.status(httpStatus.NO_CONTENT).json({});
     }
   } catch (err) {
-    res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: err.message });
+    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: err.message });
   }
 };
 
@@ -48,7 +48,7 @@ const addNewUser = async (req, res) => {
           res.status(httpStatus.CREATED).json(user);
         })
         .catch(err => {
-          res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: 'There was an error saving the user' });
+          res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error saving the user' });
         })
     }
   } catch (error) {
@@ -65,7 +65,7 @@ const updateUserById = async (req, res) => {
         res.status(httpStatus.OK).json(user);
       })
       .catch(err => {
-        res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: 'There was an error updating the user' });
+        res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error updating the user' });
       })
   } else {
     res.status(httpStatus.NOT_FOUND).json({ error: 'User not found' })
@@ -80,7 +80,7 @@ const deleteUserById = async (req, res) => {
         res.status(httpStatus.OK).json({ message: 'User deleted successfully' });
       })
       .catch(err => {
-        res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: 'There was an error deleting the user' });
+        res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error deleting the user' });
       })
   } else {
     res.status(httpStatus.NOT_FOUND).json({ error: 'User not found' })

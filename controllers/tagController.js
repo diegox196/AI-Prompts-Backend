@@ -29,7 +29,7 @@ const tagPost = async (req, res) => {
       })
       .catch(err => {
         console.log(err);
-        res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: "There was an error saving the tag" });
+        res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: "There was an error saving the tag" });
       });
   } catch (err) {
     console.log(err);

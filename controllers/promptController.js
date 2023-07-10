@@ -13,7 +13,7 @@ const getPromptById = async (req, res) => {
       res.status(httpStatus.NOT_FOUND).json({ error: 'Prompt not found' });
     }
   } catch (err) {
-    res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: err.message });
+    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: err.message });
   }
 };
 
@@ -26,7 +26,7 @@ const getPromptByUserId = async (req, res) => {
       res.status(httpStatus.NOT_FOUND).json({ error: 'User prompts not found' });
     }
   } catch (err) {
-    res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: err.message });
+    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: err.message });
   }
 };
 
@@ -39,7 +39,7 @@ const getAllPrompts = async (req, res) => {
       res.status(httpStatus.NO_CONTENT).json({});
     }
   } catch (err) {
-    res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: err.message });
+    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: err.message });
   }
 };
 
@@ -54,7 +54,7 @@ const addNewPrompt = async (req, res) => {
         res.status(httpStatus.CREATED).json(newPrompt);
       });
   } catch (error) {
-    res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: 'There was an error saving the prompt' });
+    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error saving the prompt' });
   }
 }
 
@@ -66,7 +66,7 @@ const updatePromptById = async (req, res) => {
       prompt.save();
       res.status(httpStatus.OK).json(prompt);
     } else {
-      res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: 'There was an error updating the prompt' });
+      res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error updating the prompt' });
     }
   } catch (err) {
     res.status(httpStatus.NOT_FOUND).json({ error: 'Prompt not found' })
@@ -81,7 +81,7 @@ const deletePromptById = async (req, res) => {
         res.status(httpStatus.OK).json({ message: 'Prompt deleted successfully' });
       })
       .catch(err => {
-        res.status(httpStatus.UNPRPOCESSABLE_CONTENT).json({ error: 'There was an error deleting the prompt' });
+        res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error deleting the prompt' });
       })
   } else {
     res.status(httpStatus.NOT_FOUND).json({ error: 'Prompt not found' })
