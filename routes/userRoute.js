@@ -8,10 +8,10 @@ const checkUserAuth = require('../middlewares/userAuth');
 const { getUserById, getAllUsers, addNewUser, updateUserById, deleteUserById } = require('../controllers/userController.js');
 
 // User http methods
-userRouter.get('/api/user/:id', getUserById);
-userRouter.get('/api/user', getAllUsers);
+userRouter.get('/api/user/:id', checkUserAuth, getUserById);
+userRouter.get('/api/user', checkUserAuth, getAllUsers);
 userRouter.post("/api/user", addNewUser);
-userRouter.patch("/api/user/:id", updateUserById);
-userRouter.delete("/api/user/:id", deleteUserById);
+userRouter.patch("/api/user/:id", checkUserAuth, updateUserById);
+userRouter.delete("/api/user/:id", checkUserAuth, deleteUserById);
 
 module.exports = userRouter;

@@ -4,19 +4,13 @@ const mongoose = require('mongoose');
 const promptSchema = new mongoose.Schema({
   name: { type: String },
   type: { type: String },
+  tags: [{ type: String }],
   user_id: {
     type: mongoose.ObjectId,
     ref: 'User'
   },
-  categories: [{
-    type: mongoose.ObjectId,
-    ref: 'Tag'
-  }],
-  model: {type: String},
-  input: { type: String },
-  instruction: { type: String },
-  temperature: { type: Number },
-  response: {type: String}
+  body: {type: mongoose.Schema.Types.Mixed },
+  response: { type: String }
 });
 
 

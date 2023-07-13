@@ -12,7 +12,7 @@ require('./database');
 //user
 const userRouter = require('./routes/userRoute');
 app.use(userRouter); // Routes for the user http method
-
+ 
 //session
 const sessionRouter = require('./routes/sessionRoute');
 app.use(sessionRouter); // Routes for the session http method

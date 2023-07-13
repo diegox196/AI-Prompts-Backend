@@ -7,10 +7,14 @@ const token = require('../helpers/tokenManagement');
 const httpStatus = require('../utils/httpStatus');
 
 const handleExistingSession = async (session, user) => {
-  if (session.expire < Date.now()) { //If the session has expired, generate a new token
+
+  const sessionDate = new Date(session.expire).getTime();  // Get the session date in milliseconds
+
+  if (sessionDate < Date.now()) { //If the session has expired, generate a new token
     const tokenSession = await token.tokenSing(user);
     session.token = tokenSession;
     session.expire = new Date(Date.now() + 86400000);  // 1 day expiration in milliseconds
+    console.log(session);
     await session.save();
   } else { //If the session is valid, resend the existing token
     return session.token;
