@@ -14,7 +14,6 @@ const handleExistingSession = async (session, user) => {
     const tokenSession = await token.tokenSing(user);
     session.token = tokenSession;
     session.expire = new Date(Date.now() + 86400000);  // 1 day expiration in milliseconds
-    console.log(session);
     await session.save();
   } else { //If the session is valid, resend the existing token
     return session.token;

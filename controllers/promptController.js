@@ -43,6 +43,16 @@ const getAllPrompts = async (req, res) => {
   }
 };
 
+const getPromptsTags = async (req, res) => {
+  try {
+    const tags = await Prompt.distinct('tags');
+    res.status(httpStatus.OK).json(tags);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 const addNewPrompt = async (req, res) => {
   try {
     const newPrompt = new Prompt(req.body);
@@ -74,7 +84,7 @@ const updatePromptById = async (req, res) => {
 }
 
 const deletePromptById = async (req, res) => {
-  if (req.params && req.params.id) {
+  if (req.params && req.params.id) { 
     await Prompt.findById(req.params.id)
       .then(prompt => {
         prompt.deleteOne();
@@ -88,4 +98,4 @@ const deletePromptById = async (req, res) => {
   }
 }
 
-module.exports = { getPromptById, getPromptByUserId, getAllPrompts, addNewPrompt, updatePromptById, deletePromptById };
+module.exports = { getPromptById, getPromptByUserId, getAllPrompts, getPromptsTags, addNewPrompt, updatePromptById, deletePromptById };
