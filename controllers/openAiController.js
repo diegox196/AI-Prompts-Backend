@@ -10,9 +10,10 @@ const configuration = new Configuration({
 const createImage = async (req, res) => {
   const openai = new OpenAIApi(configuration);
   if (req.body) {
-    const response = await openai.createImage(req.body);
+    const { prompt, n, size } = req.body;
+    const response = await openai.createImage({ prompt, n, size });
     if (response) {
-      res.status(httpStatus.CREATED).json(response.data.data);
+      res.status(httpStatus.CREATED).json(response.data);
     } else {
       res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ message: "There was an error executing the open AI method" })
     }
@@ -23,7 +24,6 @@ const createCompletion = async (req, res) => {
   const openai = new OpenAIApi(configuration);
   if (req.body) {
     const response = await openai.createCompletion(req.body);
-    console.log(response);
     if (response) {
       res.status(httpStatus.CREATED).json(response.data);
     } else {
@@ -44,4 +44,4 @@ const createEdit = async (req, res) => {
   }
 }
 
-module.exports = {createImage, createCompletion, createEdit};
+module.exports = { createImage, createCompletion, createEdit };

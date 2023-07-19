@@ -14,7 +14,6 @@ const checkUserRoleAuth = (role) => {
         res.status(httpStatus.UNAUTHORIZED).send({ error: 'Unauthorized' });
       }
     } catch (e) {
-      console.log('catch');
       console.log(e);
       res.status(httpStatus.UNAUTHORIZED).send({ error: 'Unauthorized' });
     }
