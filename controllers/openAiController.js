@@ -1,4 +1,3 @@
-const Prompt = require('../models/promptModel');
 const { Configuration, OpenAIApi } = require("openai");
 
 //Http Status Code

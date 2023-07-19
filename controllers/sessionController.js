@@ -50,13 +50,18 @@ const sessionAuth = async (req, res) => {
     const user = await User.findOne({ email: email.toLowerCase() });
 
     if (!user) {
-      res.status(httpStatus.NOT_FOUND).json({ error: 'User not found' });
+      res.status(httpStatus.NOT_FOUND).json({ error: 'Incorrect username or password.' });
       return;
     }
 
     const passwordMatch = bcryptjs.compareSync(password, user.password);
     if (!passwordMatch) {
-      res.status(httpStatus.NOT_FOUND).json({ error: 'User not found' });
+      res.status(httpStatus.NOT_FOUND).json({ error: 'Incorrect username or password.' });
+      return;
+    }
+
+    if(!user.active){
+      res.status(httpStatus.UNAUTHORIZED).json({ error: 'User account inactive' });
       return;
     }
 
