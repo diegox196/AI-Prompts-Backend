@@ -5,6 +5,6 @@ const sessionRouter = app.Router();
 const { sessionAuth } = require('../controllers/sessionController.js');
 
 // Session http methods
-sessionRouter.post("/api/session", sessionAuth);
+sessionRouter.post("/api/sessions", sessionAuth);
 
 module.exports = sessionRouter;

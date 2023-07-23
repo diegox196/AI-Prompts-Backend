@@ -1,5 +1,4 @@
 const Prompt = require('../models/promptModel');
-const User = require('../models/userModel');
 
 //Http Status Code
 const httpStatus = require('../utils/httpStatus');
