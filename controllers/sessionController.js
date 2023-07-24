@@ -8,16 +8,17 @@ const httpStatus = require('../utils/httpStatus');
 
 const handleExistingSession = async (session, user) => {
 
-  const sessionDate = new Date(session.expire).getTime();  // Get the session date in milliseconds
+  const tokenData = await token.verifyToken(session.token);
 
-  if (sessionDate < Date.now()) { //If the session has expired, generate a new token
+  if (!tokenData) { //If the session has expired, generate a new token
     const tokenSession = await token.tokenSing(user);
     session.token = tokenSession;
     session.expire = new Date(Date.now() + 86400000);  // 1 day expiration in milliseconds
     await session.save();
+    return tokenSession;
   } else { //If the session is valid, resend the existing token
     return session.token;
-  }
+  } 
 };
 
 // Generates a new token and saves the data in a new session. 
@@ -60,13 +61,13 @@ const sessionAuth = async (req, res) => {
       return;
     }
 
-    if(!user.active){
+    if (!user.active) {
       res.status(httpStatus.UNAUTHORIZED).json({ error: 'User account inactive' });
       return;
     }
 
     let tokenSession;
-    const session = await Session.findOne({ user: email.toLowerCase() });
+    const session = await Session.findOne({ user: email.toLowerCase() }); 
 
     if (session) {
       tokenSession = await handleExistingSession(session, user);
