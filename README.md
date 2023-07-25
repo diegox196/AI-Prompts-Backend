@@ -335,7 +335,7 @@ Example JSON object:
   "email": "example@example.com",
   "username": "john_1",
   "first_name": "John",
-  "last_name": "Doe"
+  "last_name": "Doe",
   "password": "securepassword",
   "active": false,
   "role": "user"
