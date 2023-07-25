@@ -1,11 +1,17 @@
-const Session = require('../models/sessionModel');
-const User = require('../models/userModel');
-const bcryptjs = require('bcryptjs');
-const token = require('../helpers/tokenManagement');
+const bcryptjs = require('bcryptjs'); // Import the bcryptjs library for password hashing and comparison
+const Session = require('../models/sessionModel'); // Import the Session model from sessionModel.js
+const User = require('../models/userModel'); // Import the User model from userModel.js
+const token = require('../helpers/tokenManagement'); // Import the token management module for token-related functions
 
 //Http Status Code
 const httpStatus = require('../utils/httpStatus');
 
+/**
+ * Handles the existing session, verifies the session token, and generates a new token if necessary.
+ * @param {Object} session - The session object retrieved from the database.
+ * @param {Object} user - The user object related to the session.
+ * @returns {string} - The token associated with the session.
+ */
 const handleExistingSession = async (session, user) => {
 
   const tokenData = await token.verifyToken(session.token);
@@ -18,10 +24,14 @@ const handleExistingSession = async (session, user) => {
     return tokenSession;
   } else { //If the session is valid, resend the existing token
     return session.token;
-  } 
+  }
 };
 
-// Generates a new token and saves the data in a new session. 
+/**
+ * Generates a new token and creates a new session in the database.
+ * @param {Object} user - The user object related to the new session.
+ * @returns {string} - The token associated with the new session.
+ */
 const createSession = async (user) => {
   const tokenSession = await token.tokenSing(user);
   const session = new Session({
@@ -33,7 +43,11 @@ const createSession = async (user) => {
   return tokenSession
 };
 
-// Unstructure data, showing only some user attributes
+/**
+ * Returns a JSON object with selected user attributes.
+ * @param {Object} user - The user object.
+ * @returns {Object} - A JSON object with selected user attributes.
+ */
 const userInfoJSON = (user) => {
   const { active, _id, first_name, last_name, role } = user;
 
@@ -45,6 +59,11 @@ const userInfoJSON = (user) => {
   }
 };
 
+/**
+ * Handles the session authentication process.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 const sessionAuth = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -67,7 +86,7 @@ const sessionAuth = async (req, res) => {
     }
 
     let tokenSession;
-    const session = await Session.findOne({ user: email.toLowerCase() }); 
+    const session = await Session.findOne({ user: email.toLowerCase() });
 
     if (session) {
       tokenSession = await handleExistingSession(session, user);
