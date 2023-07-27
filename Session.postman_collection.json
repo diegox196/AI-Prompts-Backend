@@ -1,0 +1,38 @@
+{
+	"info": {
+		"_postman_id": "2413a7ce-66a4-47ea-b701-1374531fec28",
+		"name": "Session",
+		"description": "Authenticate user and create a new session",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25609680"
+	},
+	"item": [
+		{
+			"name": "authToken",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"despedessol@gmail.com\",\r\n    \"password\": \"123456789\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/session",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"session"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

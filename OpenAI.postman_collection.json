@@ -1,0 +1,124 @@
+{
+	"info": {
+		"_postman_id": "8ad1bd37-7100-4675-a60e-6bb42e695c2d",
+		"name": "OpenAI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25609680"
+	},
+	"item": [
+		{
+			"name": "createImage",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_key}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"prompt\": \"A cute baby sea otter\",\r\n  \"n\": 2,\r\n  \"size\": \"1024x1024\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/openai/image",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"openai",
+						"image"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createCompletion",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_key}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"model\": \"text-davinci-003\",\r\n  \"prompt\": \"Say this is a test\",\r\n  \"max_tokens\": 256,\r\n  \"temperature\": 0.1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/openai/completion",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"openai",
+						"completion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createEdit",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_key}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"model\": \"text-davinci-edit-001\",\r\n  \"input\": \"What day of the wek is it?\",\r\n  \"instruction\": \"Fix the spelling mistakes\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/openai/edit",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"openai",
+						"edit"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

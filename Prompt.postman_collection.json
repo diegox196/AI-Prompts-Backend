@@ -1,0 +1,229 @@
+{
+	"info": {
+		"_postman_id": "157303f8-9548-4eef-8972-82dad1a33a38",
+		"name": "Prompt",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25609680"
+	},
+	"item": [
+		{
+			"name": "getAllPrompts",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_key}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/prompts",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"prompts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getPromptById",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_key}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/prompts/64af2f8828f27adc20cd2df2",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"prompts",
+						"64af2f8828f27adc20cd2df2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getPromptByUserId",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_key}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/prompts/user/64a5f58e34e648a8fe8196a3",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"prompts",
+						"user",
+						"64a5f58e34e648a8fe8196a3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getPromptTags",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/prompts/tags",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"prompts",
+						"tags"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addNewPrompt",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_key}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Fix\",\r\n  \"type\": \"edit\",\r\n  \"tags\": [\r\n    \"spelling\",\r\n    \"grammar\"\r\n  ],\r\n  \"userId\": \"64a5f58e34e648a8fe8196a3\",\r\n  \"body\": {\r\n    \"model\": \"text-davinci-edit-001\",\r\n    \"input\": \"What day of the wek is it?\",\r\n    \"instruction\": \"Fix the spelling mistakes\",\r\n    \"temperature\": 1\r\n  },\r\n  \"response\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/prompts",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"prompts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deletePromptById",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_key}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/prompts/64a79ac839872fdf4bb5cb82",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"prompts",
+						"64a79ac839872fdf4bb5cb82"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updatePromptById",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_key}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Login con JWT\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/prompts/64a79e9e4a5fddb567d83ad7",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"prompts",
+						"64a79e9e4a5fddb567d83ad7"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
