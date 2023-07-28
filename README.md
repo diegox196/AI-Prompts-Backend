@@ -68,6 +68,7 @@ The `body` parameter should be a JSON object that contains the following fields:
 
 
 ## Prompts
+The Prompts section of the API deals with managing prompts, which are user-defined instructions or queries used to interact with the OpenAI API. It provides various endpoints to perform CRUD (Create, Read, Update, Delete) operations on prompts.
 
 ### Get all prompts 
 
@@ -98,7 +99,6 @@ GET /api/prompts/tags
 ```
 
 Retrieve a list of all unique tags used in prompts (Requires user authentication with user role).
-
 
 
 ### Get prompts by user ID
@@ -194,6 +194,7 @@ Delete an existing prompt by its ID (Requires user authentication with user role
 | `id`      | `string` | **Required**. ID of the prompt to delete. |
 
 ## OpenAI
+The OpenAI section of the API is dedicated to interacting with the OpenAI API and utilizing its powerful capabilities for tasks such as image creation, completions, and edits.
 
 ### Create an image
 
@@ -223,7 +224,7 @@ Example JSON object:
 }
 ```
 
-### Create a text completion
+### Create a completion
 
 ```http
 POST /api/openai/completion
@@ -284,6 +285,7 @@ Example JSON object:
 Note: The specific fields within the JSON objects may vary based on the requirements of the OpenAI API and the data needed for each operation. Make sure to refer to the [OpenAI API documentation](https://platform.openai.com/docs/api-reference/introduction) for the correct parameters and data formats.
 
 ## Users
+The Users section of the API provides a CRUD (Create, Read, Update, Delete) interface for managing user-related data.
 
 ### Get all users
 
