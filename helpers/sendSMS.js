@@ -8,14 +8,18 @@ const generateCode = () => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-const test = `Your AI Prompt verification code is: ${generateCode()}`;
-console.log(test);
+const sendMessage = async (phone) => {
+  const code = generateCode();
 
-/*client.messages
-  .create({
-    body: `Your AI Prompt verification code is: ${generateCode}`,
-    from: '+14706135145',
-    to: '+50685742510'
-  })
-  .then(message => console.log(message.sid))
-  .done();*/
+  /*await client.messages
+    .create({
+      body: `\n Your AI Prompt verification code is: ${code}`,
+      from: '+14706135145',
+      to: '+50685742510'
+    })
+    .then(message => console.log(message.sid))
+    .catch(err => console.log(err));*/
+  return code.toString();
+}
+
+module.exports = { sendMessage };

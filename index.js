@@ -20,7 +20,9 @@ app.use(promptRouter); // Routes for the prompt http method
 const openAiRouter = require('./routes/openAiRoute');
 app.use(openAiRouter); // Routes for the open AI http method
 
-const sendSMS = require('./helpers/sendSMS');
+// Import and use openAiRoute for send message related routes
+const twoFactorAuthRouter = require('./routes/2FARoute');
+app.use(twoFactorAuthRouter); // Routes for the send message http method
 
 // Start the server and listen on the specified PORT
 app.listen(PORT, () => {
