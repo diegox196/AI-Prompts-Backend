@@ -149,7 +149,7 @@ Example JSON object:
     "model": "text-davinci-edit-001",
     "input": "What day of the wek is it?",
     "instruction": "Fix the spelling mistakes",
-    "temperature": 1
+    "temperature": 1  
   },
   "response": ""
 }
