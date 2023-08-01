@@ -12,13 +12,10 @@ const httpStatus = require('../utils/httpStatus');
  * @param {Object} user - The user object related to the session.
  * @returns {string} - The token associated with the session.
  */
-const handleExistingSession = async (session, user) => {
-
-  const tokenSession = await token.tokenSing(user);
+const handleExistingSession = async (session, tokenSession) => {
   session.token = tokenSession;
   session.expire = new Date(Date.now() + 86400000);  // 1 day expiration in milliseconds
   await session.save();
-  return tokenSession;
 };
 
 /**
@@ -26,15 +23,13 @@ const handleExistingSession = async (session, user) => {
  * @param {Object} user - The user object related to the new session.
  * @returns {string} - The token associated with the new session.
  */
-const createSession = async (user) => {
-  const tokenSession = await token.tokenSing(user);
+const createSession = async (user, tokenSession) => {
   const session = new Session({
     user: user.email,
     token: tokenSession,
     expire: new Date(Date.now() + 86400000) // 1 day expiration in milliseconds
   });
   await session.save();
-  return tokenSession
 };
 
 /**
@@ -76,17 +71,23 @@ const sessionAuth = async (req, res) => {
     }
 
     if (!user.active) {
-      res.status(httpStatus.UNAUTHORIZED).json({ error: 'User account inactive' });
+      res.status(httpStatus.UNAUTHORIZED).json({ error: 'User account inactive, please check your email' });
       return;
     }
 
-    let tokenSession;
     const session = await Session.findOne({ user: email.toLowerCase() });
 
+    const bodyToken = {
+      id: user._id,
+      role: user.role,
+    };
+
+    const tokenSession = await token.tokenSing(bodyToken, '1d');
+
     if (session) {
-      tokenSession = await handleExistingSession(session, user);
+      await handleExistingSession(session, tokenSession);
     } else { // Create a new token
-      tokenSession = await createSession(user);
+      await createSession(user, tokenSession);
     }
 
     const newUser = userInfoJSON(user);

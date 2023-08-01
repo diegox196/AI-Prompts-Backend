@@ -2,18 +2,16 @@ const jwt = require('jsonwebtoken');
 
 /**
  * Function to create a JWT token for a user.
- * @param {Object} user - User object containing user details.
+ * @param {Object} bodyToken - User object containing user details.
+ * @param {Object} time - Token expires time.
  * @returns {string} - JWT token containing user data.
  */
-const tokenSing = async (user) => {
+const tokenSing = async (bodyToken, time) => {
   //Data to add in the token
   return jwt.sign(
-    {
-      id: user._id,
-      role: user.role,
-    },
+    bodyToken,
     process.env.JWT_SECRET,
-    { expiresIn: '1d' }
+    { expiresIn: time }
   );
 };
 
