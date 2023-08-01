@@ -14,17 +14,11 @@ const httpStatus = require('../utils/httpStatus');
  */
 const handleExistingSession = async (session, user) => {
 
-  const tokenData = await token.verifyToken(session.token);
-
-  if (!tokenData) { //If the session has expired, generate a new token
-    const tokenSession = await token.tokenSing(user);
-    session.token = tokenSession;
-    session.expire = new Date(Date.now() + 86400000);  // 1 day expiration in milliseconds
-    await session.save();
-    return tokenSession;
-  } else { //If the session is valid, resend the existing token
-    return session.token;
-  }
+  const tokenSession = await token.tokenSing(user);
+  session.token = tokenSession;
+  session.expire = new Date(Date.now() + 86400000);  // 1 day expiration in milliseconds
+  await session.save();
+  return tokenSession;
 };
 
 /**
@@ -49,13 +43,14 @@ const createSession = async (user) => {
  * @returns {Object} - A JSON object with selected user attributes.
  */
 const userInfoJSON = (user) => {
-  const { active, _id, first_name, last_name, role } = user;
+  const { active, _id, first_name, last_name, role, two_factor_enabled } = user;
 
   return {
     active: active,
     user_id: _id,
     name: `${first_name} ${last_name}`,
-    role: role
+    role: role,
+    two_factor_enabled: two_factor_enabled,
   }
 };
 

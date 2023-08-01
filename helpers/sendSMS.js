@@ -11,14 +11,15 @@ const generateCode = () => {
 const sendMessage = async (phone) => {
   const code = generateCode();
 
-  /*await client.messages
+  await client.messages
     .create({
       body: `\n Your AI Prompt verification code is: ${code}`,
       from: '+14706135145',
-      to: '+50685742510'
+      to: `+506${phone}`
     })
     .then(message => console.log(message.sid))
-    .catch(err => console.log(err));*/
+    .catch(err => console.log(err));
+
   return code.toString();
 }
 

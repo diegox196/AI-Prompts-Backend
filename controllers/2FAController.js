@@ -8,6 +8,7 @@ const sendCode = async (req, res) => {
   try {
     const { email } = req.body;
     const user = await User.findOne({ email: email });
+
     if (!user || !user.phone_number) {
       return res.status(httpStatus.BAD_REQUEST).json({ message: 'Unregistered phone number for this user' });
     }

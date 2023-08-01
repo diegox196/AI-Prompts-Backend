@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String },
   phone_number: { type: String },
   two_factor_code: { type: String },
-  two_factor_enabled: { type: String, default: false },
+  two_factor_enabled: { type: Boolean, default: false },
   active: { type: Boolean, default: false },
   role: { type: String, default: 'user' }
 });
