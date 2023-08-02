@@ -12,7 +12,7 @@ const protectRouteByUserID = async (req, res, next) => {
     const authToken = req.headers['authorization'].split(' ')[1]; // Get the authorization token from the request headers
     const tokenData = await verifyToken(authToken);
 
-    if (tokenData.role === 'user' && tokenData.id == req.params.id) {
+    if (tokenData.id == req.params.id) {
       next();
     } else { // Return a 401 (Unauthorized) error if the user does not have the required role
       res.status(httpStatus.UNAUTHORIZED).send({ error: 'Unauthorized' });

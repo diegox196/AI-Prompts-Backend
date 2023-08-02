@@ -93,6 +93,47 @@ const updateUserById = async (req, res) => {
 }
 
 /**
+ * Update a user by their ID.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
+const updateUserPasswordById = async (req, res) => {
+  if (req.params && req.params.id) { // Check if request parameters and user ID are present
+    await User.findById(req.params.id) // Find the user by the provided ID
+      .then(user => {
+        const { current_password, new_password, confirm_password } = req.body;
+
+        const passwordMatch = bcryptjs.compareSync(current_password, user.password);
+        if (!passwordMatch) {
+          res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'Current password entered does not match' });
+          return;
+        }
+
+        if (new_password !== confirm_password) {
+          res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'Confirmed password does not match new password' });
+          return;
+        }
+
+        if (current_password === new_password) {
+          res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'The new password must be different from the current password' });
+          return;
+        }
+
+        const encryptedPassword = bcryptjs.hashSync(new_password, 10);
+        Object.assign(user, { password: encryptedPassword }); // Update the user password
+        user.save(); // Save the updated user object to the database
+        res.status(httpStatus.OK).json({ message: 'Password updated successfully' });
+      })
+      .catch(err => {
+        console.log(err.message);
+        res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error updating the password' });
+      })
+  } else {
+    res.status(httpStatus.NOT_FOUND).json({ error: 'User not found' })
+  }
+}
+
+/**
  * Delete a user by their ID.
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
@@ -112,4 +153,4 @@ const deleteUserById = async (req, res) => {
   }
 }
 
-module.exports = { getUserById, getAllUsers, addNewUser, updateUserById, deleteUserById };
+module.exports = { getUserById, getAllUsers, addNewUser, updateUserById, updateUserPasswordById, deleteUserById };
