@@ -29,7 +29,8 @@ const getUserById = async (req, res) => {
  */
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find();
+    // Excluding "password" and "two_factor_code" fields from the query result using Mongoose projection
+    const users = await User.find({}, { password: 0, two_factor_code: 0 });
     if (users) {
       res.status(httpStatus.OK).json(users);
     } else {
@@ -81,8 +82,14 @@ const updateUserById = async (req, res) => {
     await User.findById(req.params.id) // Find the user by the provided ID
       .then(user => {
         Object.assign(user, req.body); // Update the user object with the data from the request body
+
+        // Exclude "password" and "two_factor_code" fields from the response
+        const responseData = user.toObject();
+        delete responseData.password;
+        delete responseData.two_factor_code;
+
         user.save(); // Save the updated user object to the database
-        res.status(httpStatus.OK).json(user);
+        res.status(httpStatus.OK).json(responseData);
       })
       .catch(err => {
         res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error updating the user' });
@@ -90,7 +97,7 @@ const updateUserById = async (req, res) => {
   } else {
     res.status(httpStatus.NOT_FOUND).json({ error: 'User not found' })
   }
-}
+};
 
 /**
  * Update a user by their ID.
