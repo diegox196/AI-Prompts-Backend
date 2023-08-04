@@ -16,7 +16,7 @@ const getPromptById = async (req, res) => {
   }
 };
 
-const getPromptByUserId = async (req, res) => {
+const getPromptsByUserId = async (req, res) => {
   try {
     const prompt = await Prompt.find({ user_id: req.params.id });
     if (prompt) {
@@ -42,12 +42,16 @@ const getAllPrompts = async (req, res) => {
   }
 };
 
-const getPromptsTags = async (req, res) => {
+const getPromptsTagsByUserId = async (req, res) => {
   try {
-    const tags = await Prompt.distinct('tags');
+    /* Use the 'distinct' method to find all unique values of the 'tags' field
+    in the collection 'Prompt' where the 'user_id' matches the value provided
+    in the request parameter 'id' (req.params.id). */
+    const tags = await Prompt.find({ user_id: req.params.id }).distinct('tags');
+
     res.status(httpStatus.OK).json(tags);
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
@@ -83,7 +87,7 @@ const updatePromptById = async (req, res) => {
 }
 
 const deletePromptById = async (req, res) => {
-  if (req.params && req.params.id) { 
+  if (req.params && req.params.id) {
     await Prompt.findById(req.params.id)
       .then(prompt => {
         prompt.deleteOne();
@@ -97,4 +101,4 @@ const deletePromptById = async (req, res) => {
   }
 }
 
-module.exports = { getPromptById, getPromptByUserId, getAllPrompts, getPromptsTags, addNewPrompt, updatePromptById, deletePromptById };
+module.exports = { getPromptById, getPromptsByUserId, getAllPrompts, getPromptsTagsByUserId, addNewPrompt, updatePromptById, deletePromptById };

@@ -25,7 +25,7 @@ const verifyToken = async (token) => {
     // Verify the token using the secret key and return the decoded token data
     return jwt.verify(token, process.env.JWT_SECRET);
   } catch (e) {
-    console.log(e);
+    console.error(e);
     return null; // Return null if the token is invalid or expired
   }
 }

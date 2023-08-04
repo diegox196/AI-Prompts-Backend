@@ -41,7 +41,7 @@ const registerUser = async (req, res) => {
     const verifyToken = await token.tokenSing(bodyToken, '1h');
     await sendVerificationEmail(newUser.email, verifyToken);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(httpStatus.BAD_REQUEST).json({ error: 'Bad request' });
   }
 }
@@ -68,7 +68,7 @@ const verifyEmail = async (req, res) => {
     res.status(httpStatus.OK).json({ message: "Account activated" });
 
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(httpStatus.BAD_REQUEST).json({ error: "Bad request" });
   }
 };
@@ -121,7 +121,7 @@ const verifyResetPassword = async (req, res) => {
 
     res.status(httpStatus.OK).json({ message: "Password has been changed successfully." });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(httpStatus.BAD_REQUEST).json({ message: "Bad request" });
   }
 };

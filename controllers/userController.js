@@ -132,7 +132,7 @@ const updateUserPasswordById = async (req, res) => {
         res.status(httpStatus.OK).json({ message: 'Password updated successfully' });
       })
       .catch(err => {
-        console.log(err.message);
+        console.error(err.message);
         res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error updating the password' });
       })
   } else {
