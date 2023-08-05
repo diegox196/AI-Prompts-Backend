@@ -1,11 +1,6 @@
 const app = require('express');
 const accountRouter = app.Router();
 
-// Middleware
-const checkUserAuth = require('../middlewares/userAuth'); // Import the userAuth middleware for user authentication.
-const checkUserRoleAuth = require('../middlewares/userRole'); // Import the userRole middleware for user role authorization.
-const requiredRole = "user"; // Set the required user role to 'user'.
-
 // Import the openAiController.js module with the functions to handle openAI-related requests.
 const { registerUser, verifyEmail, forgotPasswordEmail, verifyResetPassword } = require('../controllers/accountController.js');
 
