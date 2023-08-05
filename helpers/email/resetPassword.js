@@ -1,21 +1,33 @@
-const sendResetPasswordEmail = async (email, verificationToken) => {
-  /*try {
-    const mailOptions = {
-      from: 'your_gmail_username@gmail.com', // Remitente del correo (debe ser el mismo correo de configuración)
-      to: email, // Correo de destino (correo a verificar)
-      subject: 'Verificación de correo electrónico', // Asunto del correo
-      html: `<p>Hola,</p>
-             <p>Gracias por registrarte en nuestro sitio. Por favor, haga clic en el siguiente enlace para verificar su correo electrónico:</p>
-             <p><a href="http://localhost:3000/reset-password?email=${email}&auth_token=${verificationToken}">Verificar correo electrónico</a></p>
-             <p>Si no se registró en nuestro sitio, puede ignorar este mensaje.</p>`,
-    };
+const sendMail = require('../sendMail');
+const fs = require('fs');
+const path = require('path');
 
-    await transporter.sendMail(mailOptions);
-    console.log('Correo electrónico de verificación enviado con éxito.');
-  } catch (error) {
-    console.error('Error al enviar el correo electrónico de verificación:', error);
-  }*/
-  console.log(`http://localhost:3000/reset-password?email=${email}&auth_token=${verificationToken}`);
+const sendResetPasswordEmail = async (name, email, verificationToken) => {
+  const link = `http://localhost:3000/reset-password?email=${email}&auth_token=${verificationToken}`;
+
+  const templatePath = path.join(__dirname, '../../email_templates/reset_password_email.html');
+  const msgHTML = fs.readFileSync(templatePath, 'utf8');
+
+  const replacements = {
+    name: name,
+    action_url: link
+  }
+
+  // Replace variables in the HTML content
+  let formattedHTML = msgHTML;
+  for (const [key, value] of Object.entries(replacements)) {
+    const placeholder = new RegExp(`{\\$${key}}`, 'g');
+    formattedHTML = formattedHTML.replace(placeholder, value);
+  }
+
+  const data = {
+    subject: "Reset your password",
+    msgPlainText: `To reset your password use the following link: ${link}`,
+    msgHTML: formattedHTML,
+    logSent: "Reset pasword email successfully sent"
+  };
+  
+  await sendMail(email, name, data.subject, data.msgPlainText, data.msgHTML, data.logSent);
 };
 
 module.exports = sendResetPasswordEmail;

@@ -1,20 +1,47 @@
-const sgMail = require('@sendgrid/mail')
-sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+const Mailjet = require('node-mailjet');
 
-const msg = {
-  to: 'test@example.com', // Change to your recipient
-  from: 'test@example.com', // Change to your verified sender
-  subject: 'Sending with SendGrid is Fun',
-  text: 'and easy to do anywhere, even with Node.js',
-  html: '<strong>and easy to do anywhere, even with Node.js</strong>',
-}
+const mailjet = Mailjet.apiConnect(
+  process.env.MAILJET_API_PUBLIC_KEY,
+  process.env.MAILJET_API_SECRET_KEY
+);
 
-sgMail
-  .send(msg)
-  .then((response) => {
-    console.log(response[0].statusCode)
-    console.log(response[0].headers)
-  })
-  .catch((error) => {
-    console.error(error)
-  })
+/**
+ * Sends an email using the Mailjet API.
+ * @param {string} email - The recipient's email address.
+ * @param {string} name - The recipient's name.
+ * @param {string} subject - The subject of the email.
+ * @param {string} msgPlainText - The email content in plain text format.
+ * @param {string} msgHTML - The email content in HTML format.
+ * @param {string} logSent - The message to log when the email is successfully sent.
+ */
+const sendMail = async (email, name, subject, msgPlainText, msgHTML, logSent) => {
+  try {
+    const request = await mailjet
+      .post("send", { 'version': 'v3.1' })
+      .request({
+        "Messages": [
+          {
+            "From": {
+              "Email": process.env.MAILJET_EMAIL_FROM_ADDRESS,
+              "Name": process.env.MAILJET_EMAIL_FROM_NAME
+            },
+            "To": [
+              {
+                "Email": email,
+                "Name": name
+              }
+            ],
+            "Subject": subject,
+            "TextPart": msgPlainText,
+            "HTMLPart": msgHTML,
+            "CustomID": "AppGettingStartedTest"
+          }
+        ]
+      })
+    console.log(logSent);
+  } catch (err) {
+    console.log(err.statusCode);
+  };
+};
+
+module.exports = sendMail;

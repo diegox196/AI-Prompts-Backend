@@ -1,34 +1,36 @@
-const sgMail = require('@sendgrid/mail')
-sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+const sendMail = require('../sendMail');
+const fs = require('fs');
+const path = require('path');
 
 
 // Función para enviar el correo electrónico de verificación
-const sendVerificationEmail = async (email, verificationToken) => {
+const sendVerificationEmail = async (name, email, verificationToken) => {
 
   const link = `http://localhost:3000/verify-email?verify_token=${verificationToken}`;
 
-  const msg = {
-    to: email,
-    from: 'quesada1690@gmail.com',
-    subject: 'Please verify your account',
-    text: 'and easy to do anywhere, even with Node.js',
-    html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+  const template = "../../email_templates/activation_email.html";
+  const msgHTML = fs.readFileSync(path.resolve(template), 'utf8');
+
+  const replacements = {
+    name: name,
+    action_url: link
   }
 
-  console.log(msg);
-  console.log(process.env.SENDGRID_API_KEY);
+  // Replace variables in the HTML content
+  let formattedHTML = msgHTML;
+  for (const [key, value] of Object.entries(replacements)) {
+    const placeholder = new RegExp(`{\\$${key}}`, 'g');
+    formattedHTML = formattedHTML.replace(placeholder, value);
+  }
 
-  await sgMail
-    .send(msg)
-    .then((response) => {
-      console.log(response[0].statusCode)
-      console.log(response[0].headers)
-    })
-    .catch((error) => {
-      console.error(error)
-    })
+  const data = {
+    subject: "Email Verification",
+    msgPlainText: `To activate your account use the following link: ${link}`,
+    msgHTML: formattedHTML,
+    logSent: "Verification email successfully sent"
+  };
 
-  console.log(`http://localhost:3000/verify-email?verify_token=${verificationToken}`);
+  await sendMail(email, name, data.subject, data.msgPlainText, data.msgHTML, data.logSent);
 };
 
 module.exports = sendVerificationEmail;

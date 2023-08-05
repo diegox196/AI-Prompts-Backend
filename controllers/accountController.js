@@ -4,7 +4,6 @@ const bcryptjs = require('bcryptjs');
 
 const sendResetPasswordEmail = require('../helpers/email/resetPassword');
 const sendVerificationEmail = require('../helpers/email/verification');
-const notifyPasswordChange = require('../helpers/email/notifyPasswordChange');
 const httpStatus = require('../utils/httpStatus');
 
 /**
@@ -39,7 +38,7 @@ const registerUser = async (req, res) => {
     };
 
     const verifyToken = await token.tokenSing(bodyToken, '1h');
-    await sendVerificationEmail(newUser.email, verifyToken);
+    await sendVerificationEmail(user.first_name, newUser.email, verifyToken);
   } catch (error) {
     console.error(error);
     res.status(httpStatus.BAD_REQUEST).json({ error: 'Bad request' });
@@ -89,10 +88,11 @@ const forgotPasswordEmail = async (req, res) => {
     };
 
     const resetToken = await token.tokenSing(bodyToken, '1h');
-    await sendResetPasswordEmail(user.email, resetToken);
+    await sendResetPasswordEmail(user.first_name, user.email, resetToken);
 
     res.status(httpStatus.OK).json({ message: "Reset password email sent successfully." });
   } catch (error) {
+    console.log(error.message);
     res.status(httpStatus.BAD_REQUEST).json({ error: "Bad request" });
   }
 };
@@ -116,8 +116,6 @@ const verifyResetPassword = async (req, res) => {
     const encryptedPassword = bcryptjs.hashSync(password, 10);
     user.password = encryptedPassword;
     await user.save();
-
-    await notifyPasswordChange(user.email, user.first_name);
 
     res.status(httpStatus.OK).json({ message: "Password has been changed successfully." });
   } catch (error) {

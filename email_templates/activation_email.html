@@ -15,25 +15,8 @@
       padding: 0;
     }
 
-
-    .content {
-      border-end-start-radius: 15px;
-      border-end-end-radius: 15px;
-      background-color: #ffffff;
-      box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-    }
-
     span {
       color: #0052e2;
-    }
-
-    td.header {
-      text-align: center;
-      padding: 0;
-      background-color: black;
-      color: white;
-      border-start-start-radius: 15px;
-      border-start-end-radius: 15px;
     }
 
     td {
@@ -42,23 +25,6 @@
 
     a {
       color: #0052e2;
-    }
-
-    .center {
-      text-align: center;
-    }
-
-    .btn_action {
-      background-color: #0052e2;
-      padding: 14px 30px;
-      display: inline-block;
-      color: #FFF;
-      text-decoration: none;
-      border-radius: 5px;
-      font-weight: 600;
-      font-size: 15px;
-      line-height: 21px;
-      letter-spacing: 0.25px;
     }
   </style>
 </head>
@@ -73,21 +39,27 @@
             style="max-width: 600px; border-collapse: collapse; border: 0px; border-spacing: 0px; text-align: left;">
             <tbody>
               <tr>
-                <td class="header">
+                <td style="text-align: center;">
                   <h2>Activate Your Account</h2>
                 </td>
               </tr>
               <tr>
-                <td class="content">
+                <td
+                  style="border-radius: 10px; background-color:#ffffff; box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
                   <h2 style="margin-top:0;font-size:22px;line-height:36px;font-weight:600;margin-bottom:24px;">
-                    Hi <span>{$name}</span></h2>
+                    Hi <span>{$name}</span>
+                  </h2>
                   <p>Thank you for registering on our website. To activate your account, please click the button below
                     to verify it.</p>
-                  <div class="center">
-                    <a href="{$action_url}" target="_blank" class="btn_action">Verify my email address</a>
+                  <div style="text-align:center;">
+                    <a href="{$action_url}" target="_blank"
+                      style="background-color:#0052e2; padding:14px 30px; display:inline-block; color:#FFF; text-decoration:none; border-radius:15px; font-weight:600; font-size:15px; line-height:21px; letter-spacing:0.25px;">
+                      Verify my email address
+                    </a>
                   </div>
                   <br>
-                  <p style="color: #666666;">If the link doesn&apos;t work, copy this URL into your browser:</p>
+                  <p style="color: #666666;">If the link doesn&apos;t work, you can also copy and paste the following
+                    URL into your browser: </p>
                   <a href="{$action_url}" target="_blank">[ACTIVATION_URL]</a>
                 </td>
               </tr>
