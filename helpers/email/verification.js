@@ -8,8 +8,8 @@ const sendVerificationEmail = async (name, email, verificationToken) => {
 
   const link = `http://localhost:3000/verify-email?verify_token=${verificationToken}`;
 
-  const template = "../../email_templates/activation_email.html";
-  const msgHTML = fs.readFileSync(path.resolve(template), 'utf8');
+  const templatePath = path.join(__dirname, '../../email_templates/activation_email.html');
+  const msgHTML = fs.readFileSync(templatePath, 'utf8');
 
   const replacements = {
     name: name,

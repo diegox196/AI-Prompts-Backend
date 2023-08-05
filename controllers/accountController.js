@@ -38,7 +38,7 @@ const registerUser = async (req, res) => {
     };
 
     const verifyToken = await token.tokenSing(bodyToken, '1h');
-    await sendVerificationEmail(user.first_name, newUser.email, verifyToken);
+    await sendVerificationEmail(newUser.first_name, newUser.email, verifyToken);
   } catch (error) {
     console.error(error);
     res.status(httpStatus.BAD_REQUEST).json({ error: 'Bad request' });
