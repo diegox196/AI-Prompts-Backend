@@ -25,7 +25,7 @@ const registerUser = async (req, res) => {
     const newUser = new User({ ...userData, email: email.toLowerCase(), password: encryptedPassword }); // Create a new user instance with encrypted password
     await newUser.save()
       .then(user => {
-        res.status(httpStatus.CREATED).json(user);
+        res.status(httpStatus.CREATED).json({message: "User successfully registered"});
       })
       .catch(err => {
         res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error saving the user' });
