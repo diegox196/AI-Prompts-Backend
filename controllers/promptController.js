@@ -59,13 +59,12 @@ const getPromptsTagsByUserId = async (req, res) => {
 const addNewPrompt = async (req, res) => {
   try {
     const newPrompt = new Prompt(req.body);
-    await newPrompt.save()
-      .then(prompt => {
-        res.header({
-          'location': `api/prompt/?id=${prompt.id}`
-        });
-        res.status(httpStatus.CREATED).json(newPrompt);
-      });
+    const prompt = await newPrompt.save();
+    res.header({
+      'location': `api/prompt/?id=${prompt.id}`
+    });
+    res.status(httpStatus.CREATED).json(newPrompt);
+
   } catch (error) {
     res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error saving the prompt' });
   }
@@ -88,16 +87,18 @@ const updatePromptById = async (req, res) => {
 
 const deletePromptById = async (req, res) => {
   if (req.params && req.params.id) {
-    await Prompt.findById(req.params.id)
-      .then(prompt => {
-        prompt.deleteOne();
-        res.status(httpStatus.OK).json({ message: 'Prompt deleted successfully' });
-      })
-      .catch(err => {
-        res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error deleting the prompt' });
-      })
+    try {
+      const prompt = await Prompt.findById(req.params.id);
+      if (!prompt) {
+        return res.status(httpStatus.NOT_FOUND).json({ error: 'Prompt not found' });
+      }
+      await prompt.deleteOne();
+      res.status(httpStatus.OK).json({ message: 'Prompt deleted successfully' });
+    } catch (error) {
+      res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error deleting the prompt' });
+    }
   } else {
-    res.status(httpStatus.NOT_FOUND).json({ error: 'Prompt not found' })
+    res.status(httpStatus.BAD_REQUEST).json({ error: 'Bad request' })
   }
 }
 

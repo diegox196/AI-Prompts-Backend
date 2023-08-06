@@ -9,16 +9,18 @@ const generateCode = () => {
 }
 
 const sendMessage = async (phone) => {
-  const code = generateCode();
+  try {
+    const code = generateCode();
 
-  await client.messages
-    .create({
+    const message = await client.messages.create({
       body: `\n Your AI Prompt verification code is: ${code}`,
-      from: '+14706135145',
+      from: process.env.TWILIO_PHONE_NUMBER,
       to: `+506${phone}`
     })
-    .then(message => console.log(message.sid))
-    .catch(err => console.log(err));
+    console.log(message.sid);
+  } catch (err) {
+    console.error('Error sending message:', err);
+  }
 
   return code.toString();
 }

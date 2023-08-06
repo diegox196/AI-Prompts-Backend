@@ -23,13 +23,9 @@ const registerUser = async (req, res) => {
 
     const encryptedPassword = bcryptjs.hashSync(password, 10);
     const newUser = new User({ ...userData, email: email.toLowerCase(), password: encryptedPassword }); // Create a new user instance with encrypted password
-    await newUser.save()
-      .then(user => {
-        res.status(httpStatus.CREATED).json({message: "User successfully registered"});
-      })
-      .catch(err => {
-        res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error saving the user' });
-      });
+
+    await newUser.save();
+    res.status(httpStatus.CREATED).json({ message: "User successfully registered" });
 
     const bodyToken = {
       email: email,
@@ -41,9 +37,9 @@ const registerUser = async (req, res) => {
     await sendVerificationEmail(newUser.first_name, newUser.email, verifyToken);
   } catch (error) {
     console.error(error);
-    res.status(httpStatus.BAD_REQUEST).json({ error: 'Bad request' });
-  }
-}
+    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error saving the user' });
+  };
+};
 
 const verifyEmail = async (req, res) => {
   try {
