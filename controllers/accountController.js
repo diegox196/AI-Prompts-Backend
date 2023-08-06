@@ -123,13 +123,8 @@ const verifyResetPassword = async (req, res) => {
     };
     
     const tokenData = await token.verifyToken(auth_token);
-    if (!tokenData) {
+    if (!tokenData || tokenData.email !== email) {
       return res.status(httpStatus.UNAUTHORIZED).json({ error: 'The token provided is invalid.' });
-    };
-
-    if (tokenData.email !== email) {
-      res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'Invalid Token' });
-      return;
     };
 
     const user = await User.findById(tokenData.id);

@@ -3,62 +3,107 @@ const Prompt = require('../models/promptModel');
 //Http Status Code
 const httpStatus = require('../utils/httpStatus');
 
+/**
+ * Get a prompt by its ID.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 const getPromptById = async (req, res) => {
   try {
     const prompt = await Prompt.findById(req.params.id);
-    if (prompt) {
-      res.status(httpStatus.OK).json(prompt);
-    } else {
-      res.status(httpStatus.NOT_FOUND).json({ error: 'Prompt not found' });
-    }
+    res.status(httpStatus.OK).json(prompt);
+
   } catch (err) {
-    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: err.message });
-  }
+    if (err.kind === 'ObjectId') {
+      return res.status(httpStatus.NOT_FOUND).json({ error: 'Prompt not found' });
+    };
+
+    console.error(err.message);
+    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error processing the request to get the prompt' });
+  };
 };
 
+/**
+ * Get prompts by user ID.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 const getPromptsByUserId = async (req, res) => {
   try {
+    if (!req.params.id) {
+      return res.status(httpStatus.BAD_REQUEST).json({ error: 'Bad request. Missing user ID in the request parameters.' })
+    };
+
     const prompt = await Prompt.find({ user_id: req.params.id });
-    if (prompt) {
-      res.status(httpStatus.OK).json(prompt);
-    } else {
-      res.status(httpStatus.NOT_FOUND).json({ error: 'User prompts not found' });
-    }
+    res.status(httpStatus.OK).json(prompt);
+
   } catch (err) {
-    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: err.message });
-  }
+    if (err.kind === 'ObjectId') {
+      return res.status(httpStatus.NOT_FOUND).json({ error: 'User prompts not found' });
+    };
+
+    console.error(err.message);
+    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error processing the request to get the user prompts' });
+  };
 };
 
+/**
+ * Get all prompts.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 const getAllPrompts = async (req, res) => {
   try {
     const prompt = await Prompt.find();
-    if (prompt) {
-      res.status(httpStatus.OK).json(prompt);
-    } else {
-      res.status(httpStatus.NO_CONTENT).json({});
-    }
+    if (!prompt) {
+      return res.status(httpStatus.NOT_FOUND).json({ error: 'Prompts not found' });
+    };
+
+    res.status(httpStatus.OK).json(prompt);
+
   } catch (err) {
-    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: err.message });
-  }
+    console.error(err.message);
+    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error processing the request to get the prompts' });
+  };
 };
 
+/**
+ * Get unique prompt tags by user ID.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 const getPromptsTagsByUserId = async (req, res) => {
   try {
-    /* Use the 'distinct' method to find all unique values of the 'tags' field
-    in the collection 'Prompt' where the 'user_id' matches the value provided
-    in the request parameter 'id' (req.params.id). */
+    if (!req.params.id) {
+      return res.status(httpStatus.BAD_REQUEST).json({ error: 'Bad request. Missing user ID in the request parameters.' })
+    };
+    // Use the 'distinct' method to find all unique values of the 'tags' field
     const tags = await Prompt.find({ user_id: req.params.id }).distinct('tags');
-
     res.status(httpStatus.OK).json(tags);
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
+
+  } catch (err) {
+    if (err.kind === 'ObjectId') {
+      return res.status(httpStatus.NOT_FOUND).json({ error: 'Tags not found' });
+    };
+
+    console.error(err.message);
+    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error processing the request to get the tags' });
+  };
 };
 
+/**
+ * Create a new prompt.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 const addNewPrompt = async (req, res) => {
   try {
-    const newPrompt = new Prompt(req.body);
+    const { name, type, tags, user_id, body } = req.body;
+    if (!name || !type || !tags || !user_id || !body) {
+      return res.status(httpStatus.BAD_REQUEST).json({ error: 'Bad request. Missing user ID in the request parameters.' })
+    };
+
+    const newPrompt = new Prompt({ name, type, tags, user_id, body });
     const prompt = await newPrompt.save();
     res.header({
       'location': `api/prompt/?id=${prompt.id}`
@@ -67,39 +112,53 @@ const addNewPrompt = async (req, res) => {
 
   } catch (error) {
     res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error saving the prompt' });
-  }
-}
+  };
+};
 
+/**
+ * Update a prompt by its ID.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 const updatePromptById = async (req, res) => {
   try {
-    const prompt = await Prompt.findById(req.params.id);
-    if (prompt) {
-      Object.assign(prompt, req.body);
-      prompt.save();
-      res.status(httpStatus.OK).json(prompt);
-    } else {
-      res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error updating the prompt' });
-    }
-  } catch (err) {
-    res.status(httpStatus.NOT_FOUND).json({ error: 'Prompt not found' })
-  }
-}
+    if (!req.params.id) {
+      return res.status(httpStatus.BAD_REQUEST).json({ error: 'Bad request. Missing user ID in the request parameters.' })
+    };
 
+    const prompt = await Prompt.findById(req.params.id);
+    Object.assign(prompt, req.body);
+    prompt.save();
+    res.status(httpStatus.OK).json(prompt);
+  } catch (err) {
+    if (err.kind === 'ObjectId') {
+      return res.status(httpStatus.NOT_FOUND).json({ error: 'Prompt not found' });
+    };
+    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error updating the prompt' });
+  };
+};
+
+/**
+ * Delete a prompt by its ID.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 const deletePromptById = async (req, res) => {
-  if (req.params && req.params.id) {
-    try {
-      const prompt = await Prompt.findById(req.params.id);
-      if (!prompt) {
-        return res.status(httpStatus.NOT_FOUND).json({ error: 'Prompt not found' });
-      }
-      await prompt.deleteOne();
-      res.status(httpStatus.OK).json({ message: 'Prompt deleted successfully' });
-    } catch (error) {
-      res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error deleting the prompt' });
-    }
-  } else {
-    res.status(httpStatus.BAD_REQUEST).json({ error: 'Bad request' })
-  }
-}
+  try {
+    if (!req.params.id) {
+      return res.status(httpStatus.BAD_REQUEST).json({ error: 'Bad request. Missing user ID in the request parameters.' })
+    };
+
+    const prompt = await Prompt.findById(req.params.id);
+    await prompt.deleteOne();
+    res.status(httpStatus.OK).json({ message: 'Prompt deleted successfully' });
+
+  } catch (err) {
+    if (err.kind === 'ObjectId') {
+      return res.status(httpStatus.NOT_FOUND).json({ error: 'Prompt not found' });
+    };
+    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error deleting the prompt' });
+  };
+};
 
 module.exports = { getPromptById, getPromptsByUserId, getAllPrompts, getPromptsTagsByUserId, addNewPrompt, updatePromptById, deletePromptById };
