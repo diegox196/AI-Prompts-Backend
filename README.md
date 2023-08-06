@@ -8,13 +8,27 @@ AI Prompts is an a powerful RESTful API designed for developers who want to leve
 
 To run this project, you will need to add the following environment variables to your .env file
 
-`PORT`: The port number on which the server will run. For example: `3201`.
+- `PORT`: The port number on which the server will run. For example: `3201`.
 
-`DB_URI`: The connection URL for your database.
+- `DB_URI`: The connection URL for your database.
 
-`JWT_SECRET`: The secret key used for signing and verifying JSON Web Tokens.
+- `JWT_SECRET`: The secret key used for signing and verifying JSON Web Tokens.
 
-`OPENAI_KEY`: Your API key for the OpenAI API.
+- `OPENAI_KEY`: Your API key for the OpenAI API.
+
+- `MAILJET_API_PUBLIC_KEY`: Your Mailjet API public key.
+
+- `MAILJET_API_SECRET_KEY`: Your Mailjet API secret key.
+
+- `MAILJET_EMAIL_FROM_ADDRESS`: Your authorized mailjet email address.
+
+- `MAILJET_EMAIL_FROM_NAME`: The name associated with the email address used in Mailjet.
+
+- `TWILIO_ACCOUNT_SID`: Your Twilio account SID.
+
+- `TWILIO_PHONE_NUMBER`: Your Twilio phone number.
+
+- `TWILIO_AUTH_TOKEN`: Your Twilio authentication token.
 
 
 

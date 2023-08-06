@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.AUTH_TOKEN);
+const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
 const generateCode = () => {
   const min = 100000;
