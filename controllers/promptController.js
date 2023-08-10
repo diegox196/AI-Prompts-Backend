@@ -14,12 +14,12 @@ const getPromptById = async (req, res) => {
     res.status(httpStatus.OK).json(prompt);
 
   } catch (err) {
+    
     if (err.kind === 'ObjectId') {
       return res.status(httpStatus.NOT_FOUND).json({ error: 'Prompt not found' });
     };
-
     console.error(err.message);
-    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error processing the request to get the prompt' });
+    res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'There was an error processing the request to get the prompt' });
   };
 };
 
@@ -43,7 +43,7 @@ const getPromptsByUserId = async (req, res) => {
     };
 
     console.error(err.message);
-    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error processing the request to get the user prompts' });
+    res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'There was an error processing the request to get the user prompts' });
   };
 };
 
@@ -63,7 +63,7 @@ const getAllPrompts = async (req, res) => {
 
   } catch (err) {
     console.error(err.message);
-    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error processing the request to get the prompts' });
+    res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'There was an error processing the request to get the prompts' });
   };
 };
 
@@ -87,7 +87,7 @@ const getPromptsTagsByUserId = async (req, res) => {
     };
 
     console.error(err.message);
-    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error processing the request to get the tags' });
+    res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'There was an error processing the request to get the tags' });
   };
 };
 
@@ -111,7 +111,7 @@ const addNewPrompt = async (req, res) => {
     res.status(httpStatus.CREATED).json(newPrompt);
 
   } catch (error) {
-    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error saving the prompt' });
+    res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'There was an error saving the prompt' });
   };
 };
 
@@ -134,7 +134,7 @@ const updatePromptById = async (req, res) => {
     if (err.kind === 'ObjectId') {
       return res.status(httpStatus.NOT_FOUND).json({ error: 'Prompt not found' });
     };
-    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error updating the prompt' });
+    res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'There was an error updating the prompt' });
   };
 };
 
@@ -157,7 +157,7 @@ const deletePromptById = async (req, res) => {
     if (err.kind === 'ObjectId') {
       return res.status(httpStatus.NOT_FOUND).json({ error: 'Prompt not found' });
     };
-    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error deleting the prompt' });
+    res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'There was an error deleting the prompt' });
   };
 };
 

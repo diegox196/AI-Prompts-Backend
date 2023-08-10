@@ -26,7 +26,7 @@ const sendCode = async (req, res) => {
     res.status(httpStatus.OK).json({ message: '2FA code sent by SMS' });
   } catch (err) {
     console.error(err.message);
-    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error sending the code' });
+    res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'There was an error sending the code' });
   };
 };
 
@@ -58,7 +58,7 @@ const verifyCode = async (req, res) => {
     res.status(httpStatus.OK).json({ message: 'Valid 2FA code' });
   } catch (err) {
     console.error(err.message);
-    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error verifying the code' });
+    res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'There was an error verifying the code' });
   };
 };
 

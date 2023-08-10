@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const sendResetPasswordEmail = async (name, email, verificationToken) => {
-  const link = `http://localhost:3000/reset-password?email=${email}&auth_token=${verificationToken}`;
+  const link = `http://localhost:3000/reset-password?auth_token=${verificationToken}`;
 
   const templatePath = path.join(__dirname, '../../email_templates/reset_password_email.html');
   const msgHTML = fs.readFileSync(templatePath, 'utf8');

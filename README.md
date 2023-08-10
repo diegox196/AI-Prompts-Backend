@@ -38,9 +38,9 @@ You can make requests to the API using any method you prefer (fetch API, Axios, 
 
 ```js
 const response = await axios.get('http://localhost:3201/api/prompts', {
-    headers: {
-        'Authorization': 'Bearer your_jwt_token_here'
-    }
+  headers: {
+    'Authorization': 'Bearer your_jwt_token_here'
+  }
 });
 ```
 
@@ -92,10 +92,10 @@ fetch('http://localhost:3201/api/prompts', {
 - `POST` [/api/2fa/verify](#verify-code)
 
 **Account:**
-- `POST` [/api/account/register](#register-new-user)
-- `POST` [/api/account/verify-email](#verify-email)
-- `POST` [/api/account/forgot-password-email](#forgot-password)
-- `POST` [/api/account/reset-password](#verify-reset-password)
+- `POST` [/api/accounts/register](#register-new-user)
+- `PATCH` [/api/accounts/${token}/verify-email](#verify-email)
+- `POST` [/api/accounts/forgot-password](#forgot-password)
+- `PATCH` [/api/accounts/${token}/reset-password](#verify-reset-password)
 
 
 ## API Reference
@@ -936,7 +936,7 @@ The Account section handles new user registration, email verification, sending p
 ### Register new user
 
 ```http
-POST /api/account/register
+POST /api/accounts/register
 ```
 
 Register a new user account (No authentication required).
@@ -981,27 +981,14 @@ The `body` parameter should be a JSON object that contains the following fields:
 ### Verify email
 
 ```http
-POST /api/account/verify-email
+PATCH /api/accounts/${token}/verify-email
 ```
 
 Verifies the email address of a new registered user. (No authentication required).
 
 | Parameter | Type     | Description                                     |
 | :-------- | :------- | :---------------------------------------------- |
-| `body`    | `object` | **Required**. JSON object containing user data. |
-
-The `body` parameter should be a JSON object that contains the following fields:
-
-- `auth_token`: Token with the necessary data to authorize the action **(string, required)**.
-
-
-**Example JSON object:**
-
-```json
-{
-  "auth_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyMzQ1Njc4OTAxMjM0NTY3ODkiLCJyb2xlIjoidXNlciIsImlhdCI6MTYzMzA1NjI5MywiZXhwIjoxNjMzMTQyNjkzfQ.5G2TFPQMXusdoRwS9N2v3FC2vyzIF-e6w_FCEh6E3bs"
-}
-```
+| `token`      | `string` | **Required**. Token with the necessary data to authorize the action. |
 
 **Example response:**
 
@@ -1016,7 +1003,7 @@ The `body` parameter should be a JSON object that contains the following fields:
 ### Forgot password
 
 ```http
-POST /api/account/forgot-password-email
+POST /api/accounts/forgot-password
 ```
 
 Sending an email to reset the user's password. (No authentication required).
@@ -1048,33 +1035,28 @@ The `body` parameter should be a JSON object that contains the following fields:
 
 ---
 
-
 ### Verify Reset Password
 
 ```http
-POST /api/account/verify-reset-password
+PATCH /api/accounts/${token}/reset-password
 ```
 
 Sending an email to reset the user's password. (No authentication required).
 
 | Parameter | Type     | Description                                     |
 | :-------- | :------- | :---------------------------------------------- |
+| `token`      | `string` | **Required**. Token with the necessary data to authorize the action. |
 | `body`    | `object` | **Required**. JSON object containing user data. |
 
 The `body` parameter should be a JSON object that contains the following fields:
 
-- `email`: The email associated with the user's account **(string, required)**.
 - `password`: The new user password **(string, required)**.
-- `auth_token`: Token with the necessary data to authorize the action **(string, required)**.
-
 
 **Example JSON object:**
 
 ```json
 {
-    "email": "despedessol@gmail.com",
-    "password": "mysecretpassword",
-    "auth_token": "token"
+  "password": "mynewsecretpassword",
 }
 ```
 

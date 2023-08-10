@@ -18,7 +18,7 @@ const getUserById = async (req, res) => {
       res.status(httpStatus.NOT_FOUND).json({ error: 'User not found' });
     }
   } catch (err) {
-    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: err.message });
+    res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: err.message });
   }
 };
 
@@ -37,7 +37,7 @@ const getAllUsers = async (req, res) => {
       res.status(httpStatus.NO_CONTENT).json({});
     }
   } catch (err) {
-    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: err.message });
+    res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: err.message });
   }
 };
 
@@ -65,7 +65,7 @@ const addNewUser = async (req, res) => {
     res.status(httpStatus.CREATED).json(newUser);
 
   } catch (error) {
-    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error saving the user' });
+    res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'There was an error saving the user' });
   }
 }
 
@@ -95,7 +95,7 @@ const updateUserById = async (req, res) => {
     await user.save(); // Save the updated user object to the database
     res.status(httpStatus.OK).json(responseData);
   } catch (error) {
-    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error updating the user' });
+    res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'There was an error updating the user' });
   }
 };
 
@@ -118,15 +118,15 @@ const updateUserPasswordById = async (req, res) => {
     const { current_password, new_password, confirm_password } = req.body;
     const passwordMatch = bcryptjs.compareSync(current_password, user.password);
     if (!passwordMatch) {
-      return res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'Current password entered does not match' });
+      return res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'Current password entered does not match' });
     };
 
     if (new_password !== confirm_password) {
-      return res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'Confirmed password does not match new password' });
+      return res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'Confirmed password does not match new password' });
     };
 
     if (current_password === new_password) {
-      return res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'The new password must be different from the current password' });
+      return res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'The new password must be different from the current password' });
     };
 
     const encryptedPassword = bcryptjs.hashSync(new_password, 10);
@@ -136,7 +136,7 @@ const updateUserPasswordById = async (req, res) => {
 
   } catch (error) {
     console.error(err.message);
-    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error updating the password' });
+    res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'There was an error updating the password' });
   };
 };
 
@@ -160,7 +160,7 @@ const deleteUserById = async (req, res) => {
     res.status(httpStatus.OK).json({ message: 'User deleted successfully' });
 
   } catch (error) {
-    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error deleting the user' });
+    res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'There was an error deleting the user' });
   }
 }
 

@@ -38,7 +38,7 @@ const registerUser = async (req, res) => {
     res.status(httpStatus.CREATED).json({ message: "User successfully registered" });
   } catch (error) {
     console.error(error);
-    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error saving the user' });
+    res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'There was an error saving the user' });
   };
 };
 
@@ -49,7 +49,7 @@ const registerUser = async (req, res) => {
  */
 const verifyEmail = async (req, res) => {
   try {
-    const { auth_token } = req.body;
+    const { auth_token } = req.params;
     if (!auth_token) {
       return res.status(httpStatus.BAD_REQUEST).json({ error: 'Please provide the required information in the request body.' });
     };
@@ -74,7 +74,7 @@ const verifyEmail = async (req, res) => {
 
   } catch (error) {
     console.error(error);
-    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error verifying the email' });
+    res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'There was an error verifying the email' });
   };
 };
 
@@ -83,20 +83,20 @@ const verifyEmail = async (req, res) => {
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
  */
-const forgotPasswordEmail = async (req, res) => {
+const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
     if (!email) {
       return res.status(httpStatus.BAD_REQUEST).json({ error: 'Please provide the required information in the request body.' });
     };
-    
+
     const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) {
       return res.status(httpStatus.NOT_FOUND).json({ error: 'User not found.' });
     };
 
     const bodyToken = {
-      email: email,
+      email: user.email,
       id: user._id
     };
 
@@ -106,7 +106,7 @@ const forgotPasswordEmail = async (req, res) => {
     res.status(httpStatus.OK).json({ message: 'Reset password email sent successfully.' });
   } catch (error) {
     console.log(error.message);
-    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'An error has occurred in the password reset request.' });
+    res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'An error has occurred in the password reset request.' });
   };
 };
 
@@ -117,13 +117,14 @@ const forgotPasswordEmail = async (req, res) => {
  */
 const verifyResetPassword = async (req, res) => {
   try {
-    const { email, password, auth_token } = req.body;
-    if (!email || !password || !auth_token) {
+    const { auth_token } = req.params;
+    const { password } = req.body;
+    if (!auth_token || !password) {
       return res.status(httpStatus.BAD_REQUEST).json({ error: 'Please provide the required information in the request body.' });
     };
-    
+
     const tokenData = await token.verifyToken(auth_token);
-    if (!tokenData || tokenData.email !== email) {
+    if (!tokenData) {
       return res.status(httpStatus.UNAUTHORIZED).json({ error: 'The token provided is invalid.' });
     };
 
@@ -139,8 +140,8 @@ const verifyResetPassword = async (req, res) => {
     res.status(httpStatus.OK).json({ message: 'Password has been changed successfully.' });
   } catch (error) {
     console.error(error);
-    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error changing the password' });
+    res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'There was an error changing the password' });
   };
 };
 
-module.exports = { registerUser, verifyEmail, forgotPasswordEmail, verifyResetPassword };
+module.exports = { registerUser, verifyEmail, forgotPassword, verifyResetPassword };

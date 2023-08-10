@@ -24,7 +24,7 @@ const createImage = async (req, res) => {
     const response = await openai.createImage({ prompt, n, size });
     res.status(httpStatus.CREATED).json(response.data);
   } catch (error) {
-    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error executing the open AI method' })
+    res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'There was an error executing the open AI method' })
   };
 };
 
@@ -45,7 +45,7 @@ const createCompletion = async (req, res) => {
     const response = await openai.createCompletion({ model, prompt, ...completionData });
     res.status(httpStatus.CREATED).json(response.data);
   } catch (error) {
-    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error executing the open AI method' })
+    res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'There was an error executing the open AI method' })
   };
 };
 
@@ -66,7 +66,7 @@ const createEdit = async (req, res) => {
     const response = await openai.createEdit({ model, input, instruction, ...editData });
     res.status(httpStatus.CREATED).json(response.data);
   } catch (error) {
-    res.status(httpStatus.UNPRPOCESSABLE_ENTRY).json({ error: 'There was an error executing the open AI method' })
+    res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'There was an error executing the open AI method' })
   };
 };
 
