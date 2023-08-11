@@ -100,7 +100,7 @@ const updateUserById = async (req, res) => {
 };
 
 /**
- * Update a user by their ID.
+ * Change the user password.
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
  */

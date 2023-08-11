@@ -57,23 +57,24 @@ const userInfoJSON = (user) => {
 const sessionAuth = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email: email.toLowerCase() });
 
+    if (!email || !password) {
+      return res.status(httpStatus.BAD_REQUEST).json({ error: 'Please provide the required information in the request body.' });
+    };
+
+    const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) {
-      res.status(httpStatus.NOT_FOUND).json({ error: 'Incorrect username or password.' });
-      return;
-    }
+      return res.status(httpStatus.NOT_FOUND).json({ error: 'Incorrect username or password.' });
+    };
 
     const passwordMatch = bcryptjs.compareSync(password, user.password);
     if (!passwordMatch) {
-      res.status(httpStatus.NOT_FOUND).json({ error: 'Incorrect username or password.' });
-      return;
-    }
+      return res.status(httpStatus.NOT_FOUND).json({ error: 'Incorrect username or password.' });
+    };
 
     if (!user.active) {
-      res.status(httpStatus.UNAUTHORIZED).json({ error: 'User account inactive, please check your email' });
-      return;
-    }
+      return res.status(httpStatus.UNAUTHORIZED).json({ error: 'User account inactive, please check your email' });
+    };
 
     const session = await Session.findOne({ user: email.toLowerCase() });
 
@@ -83,7 +84,6 @@ const sessionAuth = async (req, res) => {
     };
 
     const tokenSession = await token.tokenSing(bodyToken, '1d');
-
     if (session) {
       await handleExistingSession(session, tokenSession);
     } else { // Create a new token
@@ -94,7 +94,7 @@ const sessionAuth = async (req, res) => {
     res.status(httpStatus.OK).json({ user: newUser, tokenSession });
 
   } catch (error) {
-    res.status(httpStatus.BAD_REQUEST).json({ error: 'Bad request' });
+    res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'There was an error executing the auth method' })
   }
 }
 
