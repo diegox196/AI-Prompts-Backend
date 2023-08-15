@@ -16,7 +16,7 @@ const mailjet = Mailjet.apiConnect(
  */
 const sendMail = async (email, name, subject, msgPlainText, msgHTML, logSent) => {
   try {
-    const request = await mailjet
+    await mailjet
       .post("send", { 'version': 'v3.1' })
       .request({
         "Messages": [
@@ -40,7 +40,7 @@ const sendMail = async (email, name, subject, msgPlainText, msgHTML, logSent) =>
       })
     console.log(logSent);
   } catch (err) {
-    console.log(err.statusCode);
+    console.log(err);
   };
 };
 

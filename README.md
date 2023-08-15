@@ -30,6 +30,9 @@ To run this project, you will need to add the following environment variables to
 
 - `TWILIO_AUTH_TOKEN`: Your Twilio authentication token.
 
+- `URL_VALIDATE_EMAIL`: The URL for validating email addresses. You can append the `verify_token` parameter to this URL.
+
+- `URL_RESET_PASSWORD`: The URL for resetting passwords. You can append the `auth_token` parameter to this URL.
 
 
 ## How to use

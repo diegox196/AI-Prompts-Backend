@@ -1,33 +1,24 @@
-const sendMail = require('../sendMail');
-const fs = require('fs');
-const path = require('path');
+const generateDynamicEmail = require('./generateDynamicEmail');
 
+/**
+ * Sends a reset password email.
+ * @param {string} name - The name of the email recipient.
+ * @param {string} email - The email address to send the email to.
+ * @param {string} verificationToken - The verification token for the reset password link.
+ */
 const sendResetPasswordEmail = async (name, email, verificationToken) => {
-  const link = `http://localhost:3000/reset-password?auth_token=${verificationToken}`;
+  const link = `${process.env.URL_RESET_PASSWORD}${verificationToken}`; // Construct the reset password link
 
-  const templatePath = path.join(__dirname, '../../email_templates/reset_password_email.html');
-  const msgHTML = fs.readFileSync(templatePath, 'utf8');
-
-  const replacements = {
-    name: name,
-    action_url: link
-  }
-
-  // Replace variables in the HTML content
-  let formattedHTML = msgHTML;
-  for (const [key, value] of Object.entries(replacements)) {
-    const placeholder = new RegExp(`{\\$${key}}`, 'g');
-    formattedHTML = formattedHTML.replace(placeholder, value);
-  }
+  // Path the content of the HTML template file
+  const filePath = '../../email_templates/reset_password_email.html';
 
   const data = {
     subject: "Reset your password",
     msgPlainText: `To reset your password use the following link: ${link}`,
-    msgHTML: formattedHTML,
     logSent: "Reset pasword email successfully sent"
   };
-  
-  await sendMail(email, name, data.subject, data.msgPlainText, data.msgHTML, data.logSent);
+
+  await generateDynamicEmail (email, name, filePath, link, data);
 };
 
 module.exports = sendResetPasswordEmail;

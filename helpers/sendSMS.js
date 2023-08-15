@@ -18,9 +18,8 @@ const generateCode = () => {
  * @returns {string} The generated verification code as a string.
  */
 const sendMessage = async (phone) => {
+  const code = generateCode();
   try {
-    const code = generateCode();
-
     const message = await client.messages.create({
       body: `\n Your AI Prompt verification code is: ${code}`,
       from: process.env.TWILIO_PHONE_NUMBER,
@@ -30,7 +29,6 @@ const sendMessage = async (phone) => {
   } catch (err) {
     console.error('Error sending message:', err);
   };
-
   return code.toString();
 }
 
