@@ -14,7 +14,7 @@ const path = require('path');
  * @param {string} data.msgPlainText - The plain text version of the email content.
  * @param {string} data.logSent - Log message indicating that the email was sent successfully.
  */
-const generateDynamicEmail = async (name, email, filePath, link, data) => {
+const generateDynamicEmail = async (email, name, filePath, link, data) => {
 
   // Read the content of the HTML template file
   const templatePath = path.join(__dirname, filePath);
