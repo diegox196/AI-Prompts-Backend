@@ -28,7 +28,7 @@ const generateDynamicEmail = async (email, name, filePath, link, data) => {
   // Replace variables in the HTML template content
   let formattedHTML = msgHTML;
   for (const [key, value] of Object.entries(replacements)) {
-    // For example, if key is "name", the regular expression will be `/{$name}/g`.
+    //Creates a regular expression to find and replace patterns of the form "{$key}" in a string.
     const placeholder = new RegExp(`{\\$${key}}`, 'g');
     formattedHTML = formattedHTML.replace(placeholder, value);
   };

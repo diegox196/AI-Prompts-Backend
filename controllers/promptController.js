@@ -106,7 +106,7 @@ const addNewPrompt = async (req, res) => {
     const newPrompt = new Prompt({ name, type, tags, user_id, body });
     const prompt = await newPrompt.save();
     res.header({
-      'location': `api/prompt/?id=${prompt.id}`
+      'location': `api/prompts/${prompt.id}`
     });
     res.status(httpStatus.CREATED).json(newPrompt);
 

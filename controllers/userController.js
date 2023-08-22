@@ -60,7 +60,7 @@ const addNewUser = async (req, res) => {
 
     await newUser.save();
     res.header({
-      'location': `api/user/?id=${newUser.id}`
+      'location': `api/users/${newUser.id}`
     });
     res.status(httpStatus.CREATED).json(newUser);
 
@@ -96,7 +96,7 @@ const updateUserById = async (req, res) => {
     res.status(httpStatus.OK).json(responseData);
   } catch (error) {
     res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'There was an error updating the user' });
-  }
+  };
 };
 
 /**
