@@ -20,6 +20,15 @@ app.use(promptRouter); // Routes for the prompt http method
 const openAiRouter = require('./routes/openAiRoute');
 app.use(openAiRouter); // Routes for the open AI http method
 
+// Import and use openAiRoute for send message related routes
+const twoFactorAuthRouter = require('./routes/2FARoute');
+app.use(twoFactorAuthRouter); // Routes for the send message http method
+
+
+// Import and use accountRoute for send message related routes
+const accountRouter = require('./routes/accountRoute');
+app.use(accountRouter); // Routes for account http method
+
 // Start the server and listen on the specified PORT
 app.listen(PORT, () => {
   console.log(`The server is listening on the PORT ${PORT} (URL http://localhost:${PORT})`);

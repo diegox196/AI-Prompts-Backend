@@ -7,15 +7,15 @@ const checkUserRoleAuth = require('../middlewares/userRole'); // Import the user
 const requiredRole = 'user'; // Set the required user role to 'user'.
 
 // Import the promptController.js module with the functions to handle prompt-related requests.
-const { getPromptById, getPromptByUserId, getAllPrompts, getPromptsTags, addNewPrompt, updatePromptById, deletePromptById } = require('../controllers/promptController.js');
+const { getPromptById, getPromptsByUserId, getAllPrompts, getPromptsTagsByUserId, addNewPrompt, updatePromptById, deletePromptById } = require('../controllers/promptController.js');
 
 /* Prompt http methods
 Define various routes for prompt handling and specify the required authentication and role authorization middleware for each route.
 Route to get all prompts. Requires user authentication and 'user' role authorization. */
 promptRouter.get('/api/prompts', checkUserAuth, checkUserRoleAuth([requiredRole]), getAllPrompts);
 promptRouter.get('/api/prompts/:id', checkUserAuth, checkUserRoleAuth([requiredRole]), getPromptById);
-promptRouter.get('/api/prompts/tags', checkUserAuth, checkUserRoleAuth([requiredRole]), getPromptsTags);
-promptRouter.get('/api/prompts/user/:id', checkUserAuth, checkUserRoleAuth([requiredRole]), getPromptByUserId);
+promptRouter.get('/api/prompts/user/:id', checkUserAuth, checkUserRoleAuth([requiredRole]), getPromptsByUserId);
+promptRouter.get('/api/prompts/user/:id/tags', checkUserAuth, checkUserRoleAuth([requiredRole]), getPromptsTagsByUserId);
 
 promptRouter.post('/api/prompts', checkUserAuth, checkUserRoleAuth([requiredRole]), addNewPrompt);
 promptRouter.patch('/api/prompts/:id', checkUserAuth, checkUserRoleAuth([requiredRole]), updatePromptById);

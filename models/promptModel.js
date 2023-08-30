@@ -10,7 +10,7 @@ const promptSchema = new mongoose.Schema({
     ref: 'User'
   },
   body: {type: mongoose.Schema.Types.Mixed },
-  response: { type: String }
+  response: { type: String, default: '' }
 });
 
 
